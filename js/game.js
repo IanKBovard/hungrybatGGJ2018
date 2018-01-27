@@ -28,7 +28,7 @@
 
   function create() {
     background = game.add.tileSprite(0, 0, 640, 480, 'background');
-
+    game.world.setBounds(0, 0, 325, 480);
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
@@ -110,11 +110,10 @@
   function killBullet(){
     playerBullets.children
     .filter(bullet => {
-      console.log('HERE', bullet.lifespan)
       if(bullet.lifespan === 0){
         bullet.destroy();
       }
-    })
+    });
   }
   function update() {
     handleBackgroundScroll();
