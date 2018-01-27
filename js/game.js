@@ -3,13 +3,13 @@
   const GAME_HEIGHT = 480;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
-  const BACKGROUND_SCROLL_SPEED = 2.5;
+  const BACKGROUND_SCROLL_SPEED = 2;
   const PLAYER_CHARACTER_MOVE_SPEED = 4;
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
 
-/*  const OBSTACLE_SPAWN_FREQ = 100;*/
-/*  const randomGenerator = new Phaser.RandomDataGenerator();*/
+/*  const OBSTACLE_SPAWN_FREQ = 100;
+  const randomGenerator = new Phaser.RandomDataGenerator();*/
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
@@ -19,32 +19,45 @@
   let obstacles;
   let background;
   let playerBullets;
+  let mask;
+
   function preload() {
-    game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5);
+    game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
+
+    //placeholders
     game.load.image('background', '../assets/bg_1_1.png');
     game.load.spritesheet('bullets', '../assets/spr_bullet_strip04.png', 28, 28);
+
   }
 
   function create() {
-    background = game.add.tileSprite(0, 0, 640, 480, 'background');
+    background = game.add.sprite(0, 0, 'background');
+    background.scale.set(2);
     game.world.setBounds(0, 0, 325, 480);
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
+    mask = game.add.graphics(0, 0);
+    mask.beginFill(0xffffff);
+    mask.drawCircle(60, 200, 120);
+
     game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.restitution = 1;
+    game.physics.p2.restitution = 0.8;
 
     obstacles = game.add.group();
-
     playerBullets = game.add.group();
 
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
+    background.mask = mask;
+
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
+    console.log('asjkhasjkdasjlkh',mask.body);
+
     playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
-    playerCharacter.animations.play('idleFloat', 15, true);
+    playerCharacter.animations.play('idleFloat', 12, true);
   }
 
   function handlePlayerCharacterMovement() {
@@ -59,23 +72,37 @@
     }
     switch(true){
       case cursors.left.isDown:
-        playerCharacter.body.moveLeft(200 * movingH);
+        if(playerCharacter.body.x > 55){
+          playerCharacter.body.moveLeft(200 * movingH);
+          background.mask.x -= 3.3 * movingH;
+        }
         break;
       case cursors.right.isDown:
-        playerCharacter.body.moveRight(200 * movingH);
+        if(playerCharacter.body.x < 270){
+          playerCharacter.body.moveRight(200 * movingH);
+          background.mask.x += 3.3 * movingH;
+        }
+        break;
     }
     switch(true){
       case cursors.down.isDown:
-        playerCharacter.body.moveDown(200 * movingV);
+        if(playerCharacter.body.y < 430){
+          playerCharacter.body.moveDown(200 * movingV);
+          background.mask.y += 3.3 * movingV;
+        }
         break;
       case cursors.up.isDown:
-        playerCharacter.body.moveUp(200 * movingV);
+        if(playerCharacter.body.y > 55){
+          playerCharacter.body.moveUp(200 * movingV);
+          background.mask.y -= 3.3 * movingV;
+        }
         break;
     }
   }
 
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
+      bullet.mask = mask;
       bullet.x += PLAYER_BULLET_SPEED;
     });
   }
@@ -89,24 +116,27 @@
     }
   }
 
-  function handleObstacleScroll() {
+/*  function handleObstacleScroll() {
     obstacles.x -= BACKGROUND_SCROLL_SPEED;
-  }
+  }*/
 
-  function handleBackgroundScroll() {
+/*  function handleBackgroundScroll() {
     background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
-  }
-  function killBullet(){
+  }*/
+
+  function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       playerBullets.children.splice(0, 1);
     }
   }
+
   function update() {
-    handleBackgroundScroll();
-    handlePlayerCharacterMovement();
-    handleObstacleScroll();
+/*    handleBackgroundScroll();
+*/    handlePlayerCharacterMovement();
+/*    handleObstacleScroll();*/
     handleBulletAnimations();
-    killBullet();
+
+    removeBulletFromArray();
   }
 
 })(window.Phaser);
