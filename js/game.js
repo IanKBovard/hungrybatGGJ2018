@@ -34,7 +34,7 @@
     cursors.fire.onUp.add(handlePlayerFire);
 
     game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.restitution = 0.8;
+    game.physics.p2.restitution = 1;
 
     obstacles = game.add.group();
 
@@ -43,7 +43,8 @@
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
-
+    playerCharacter.body.fixedRotation = true;
+    console.log('HERE',playerCharacter.body)
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 15, true);
   }
@@ -77,7 +78,6 @@
   }
 
   function handleBulletAnimations() {
-    console.log(playerBullets)
     playerBullets.children.forEach(bullet => {
       bullet.x += PLAYER_BULLET_SPEED;
     });
