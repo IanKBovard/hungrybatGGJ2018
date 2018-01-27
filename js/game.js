@@ -78,11 +78,23 @@
     background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
   }
 
+  function handleMicInputData() {
+    analyser.getByteTimeDomainData(dataArray);
+    
+    if (dataArray[0] > 180) {
+      console.log('Threshold passed');
+    }
+  }
+
   function update() {
     handleBackgroundScroll();
     handlePlayerCharacterMovement();
     handleObstacleScroll();
     handleBulletAnimations();
+
+    if (micSwitch) {
+      handleMicInputData();
+    }
   }
 
 })(window.Phaser);
