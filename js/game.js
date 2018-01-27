@@ -108,8 +108,7 @@
       updateCount = 20;
       analyser.getByteTimeDomainData(dataArray);
       
-      if (Math.max(...dataArray) > 200) {
-        console.log('AAAAAAAAAAAAAAAHH!');
+      if (Math.max(...dataArray) > 225) {
         handlePlayerFire();
       }      
     }
