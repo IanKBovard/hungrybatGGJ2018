@@ -31,6 +31,7 @@
   }
 
   function create() {
+
     background = game.add.sprite(0, 0, 'background');
     background.scale.set(2);
     game.world.setBounds(0, 0, 325, 480);
@@ -41,6 +42,7 @@
     mask = game.add.graphics(0, 0);
     mask.beginFill(0xffffff);
     mask.drawCircle(60, 200, 120);
+    console.log(';asjlkhfh',mask.blendMode);
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
@@ -53,7 +55,6 @@
 
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
-    console.log('asjkhasjkdasjlkh',mask.body);
 
     playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
@@ -116,14 +117,6 @@
     }
   }
 
-/*  function handleObstacleScroll() {
-    obstacles.x -= BACKGROUND_SCROLL_SPEED;
-  }*/
-
-/*  function handleBackgroundScroll() {
-    background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
-  }*/
-
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       playerBullets.children.splice(0, 1);
@@ -131,9 +124,7 @@
   }
 
   function update() {
-/*    handleBackgroundScroll();
-*/    handlePlayerCharacterMovement();
-/*    handleObstacleScroll();*/
+    handlePlayerCharacterMovement();
     handleBulletAnimations();
 
     removeBulletFromArray();
