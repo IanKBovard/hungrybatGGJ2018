@@ -19,7 +19,6 @@
   let obstacles;
   let background;
   let playerBullets;
-
   function preload() {
     game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5);
     game.load.image('background', '../assets/bg_1_1.png');
@@ -44,14 +43,12 @@
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
     playerCharacter.body.fixedRotation = true;
-    console.log('HERE',playerCharacter.body)
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 15, true);
   }
 
   function handlePlayerCharacterMovement() {
     playerCharacter.body.setZeroVelocity();
-
     let movingH = SQRT_TWO;
     let movingV = SQRT_TWO;
     if(cursors.up.isDown || cursors.down.isDown){
@@ -84,10 +81,12 @@
   }
 
   function handlePlayerFire() {
-    playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 10, 'bullets', 0));
-    playerBullets.children.forEach(bullet => {
-      bullet.lifespan = 300;
-    });
+    if(playerBullets.children.length === 0){
+      playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 10, 'bullets', 0));
+      playerBullets.children.forEach(bullet => {
+        bullet.lifespan = 300;
+      });
+    }
   }
 
   function handleObstacleScroll() {
@@ -97,23 +96,10 @@
   function handleBackgroundScroll() {
     background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
   }
-/*  function handleBulletDistance(){
-    playerBullets.children
-    .filter(bullet => bullet.x )
-  }*/
-/*  function randomlySpawnObstacles(){
-    if(randomGenerator.between(0, OBSTACLE_SPAWN_FREQ) === 0){
-      let randomY = randomGenerator.between(0, GAME_HEIGHT);
-      obstacles.add(game.add.sprite(900, randomY, GFX, 0))
-    }
-  }*/
   function killBullet(){
-    playerBullets.children
-    .filter(bullet => {
-      if(bullet.lifespan === 0){
-        bullet.destroy();
-      }
-    });
+    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan <= 0){
+      playerBullets.children.splice(0, 1);
+    }
   }
   function update() {
     handleBackgroundScroll();
@@ -121,7 +107,6 @@
     handleObstacleScroll();
     handleBulletAnimations();
     killBullet();
-/*    randomlySpawnObstacles();*/
   }
 
 })(window.Phaser);
