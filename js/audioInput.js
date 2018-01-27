@@ -1,6 +1,4 @@
-const audioInput = () => {
-  return new Pizzicato.Sound({
-    source: 'input',
-    options: { volume: 0.8 }
-  });
-};
+const audioInput = new Pizzicato.Sound({
+  source: 'input',
+  options: { volume: 0.8 }
+});
