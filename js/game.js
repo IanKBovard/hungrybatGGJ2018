@@ -20,6 +20,7 @@
   let background;
   let playerBullets;
   let mask;
+  let updateCount = 20;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
@@ -55,7 +56,6 @@
 
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
-
     playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 12, true);
@@ -117,6 +117,20 @@
     }
   }
 
+  function handleMicInputData() {
+    // condition reduces number of times analyser will be called
+    if (updateCount > 0) {
+      updateCount--;
+    } else {
+      updateCount = 20;
+      analyser.getByteTimeDomainData(dataArray);
+
+      if (Math.max(...dataArray) > 200) {
+        handlePlayerFire();
+      }
+    }
+  }
+
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       playerBullets.children.splice(0, 1);
@@ -126,6 +140,10 @@
   function update() {
     handlePlayerCharacterMovement();
     handleBulletAnimations();
+
+    if (micSwitch) {
+      handleMicInputData();
+    }
 
     removeBulletFromArray();
   }
