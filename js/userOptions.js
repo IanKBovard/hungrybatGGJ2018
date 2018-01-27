@@ -1,3 +1,9 @@
+/*
+
+Handles the mic input used to control the echo-location of the bat
+
+*/
+
 const micInput = new Pizzicato.Sound({
   source: 'input',
   options: { volume: 0.8 }
