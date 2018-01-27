@@ -3,25 +3,62 @@
   const GAME_HEIGHT = 480;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
+  const BACKGROUND_SCROLL_SPEED = 4;
+  const PLAYER_CHARACTER_MOVE_SPEED = 4;
 
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let playerCharacter
-  let playerCharacterFloat
+  let playerCharacter;
+  let playerCharacterFloat;
+  let cursors;
+  let obstacles;
+  let background;
 
   function preload() {
-    game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5)
+    game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5);
+    game.load.image('background', '../assets/bg_1_1.png');
   };
 
   function create() {
-    playerCharacter = game.add.sprite(45, 200, GFX, 0)
-    playerCharacterFloat = playerCharacter.animations.add('idleFloat')
-    playerCharacter.animations.play('idleFloat', 15, true)
+    game.stage.backgroundColor = '#2d2d2d';
+    background = game.add.tileSprite(0, 0, 4000, 480, 'background');
+    cursors = game.input.keyboard.createCursorKeys();
+    game.physics.startSystem(Phaser.Physics.P2JS);
+    game.physics.p2.restitution = 0.8
+
+    obstacles = game.add.sprite(2000, 100, GFX, 0);
+
+    playerCharacter = game.add.sprite(60, 200, GFX, 0);
+    game.physics.p2.enable(playerCharacter);
+    playerCharacter.body.collideWorldBounds = true;
+    playerCharacterFloat = playerCharacter.animations.add('idleFloat');
+    playerCharacter.animations.play('idleFloat', 15, true);
   };
 
-  function update() {
+  function handlePlayerCharacterMovement(){
+    playerCharacter.body.setZeroVelocity()
 
+    let movingH = PLAYER_CHARACTER_MOVE_SPEED;
+    switch(true){
+      case cursors.down.isDown:
+        playerCharacter.body.moveDown(200);
+        break;
+      case cursors.up.isDown:
+        playerCharacter.body.moveUp(200);
+        break;
+    }
+  };
+  function handleObstacleScroll(){
+    obstacles.x -= BACKGROUND_SCROLL_SPEED;
+  }
+   function handleBackgroundScroll(){
+    background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
+   }
+  function update() {
+    handleBackgroundScroll();
+    handlePlayerCharacterMovement();
+    handleObstacleScroll();
   };
 
 })(window.Phaser);
