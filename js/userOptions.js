@@ -13,7 +13,7 @@ analyser.getByteTimeDomainData(dataArray);
 
 const micInput = new Pizzicato.Sound({
   source: 'input',
-  options: { volume: 0.8 }
+  options: { volume: 0.8, detached: true }
 }, err => {
   if (err) return;
   
@@ -31,12 +31,12 @@ function handleAudioInputFlag() {
   micSwitch = !micSwitch;
 
   if (micSwitch) {  
-    console.log('play');
+    console.log('mic on');
         
     micInput.play();
 
   } else {
-    console.log('stop');
+    console.log('mic off');
     
     micInput.stop();
   }

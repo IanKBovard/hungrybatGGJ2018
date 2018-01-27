@@ -101,6 +101,7 @@
   }
 
   function handleMicInputData() {
+    // condition reduces number of times analyser will be called
     if (updateCount > 0) {
       updateCount--;
     } else {
@@ -109,6 +110,7 @@
       
       if (Math.max(...dataArray) > 200) {
         console.log('AAAAAAAAAAAAAAAHH!');
+        handlePlayerFire();
       }      
     }
   }
