@@ -15,7 +15,6 @@
   let obstacles;
   let background;
   let playerBullets;
-  let micInput;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5);
@@ -45,27 +44,6 @@
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 15, true);
 
-  }
-
-  function syncAudioInput() {
-    micInput = new Pizzicato.Sound({
-      source: 'input',
-      options: { volume: 0.8 }
-    });
-  }
-
-  function desyncAudioInput() {
-    micInput = {};
-  }
-
-  function handleAudioInputFlag(micSwitch) {
-    if (micSwitch) {
-      syncAudioInput();
-      micInput.play();
-      
-    } else {
-      desyncAudioInput();
-    }
   }
 
   function handlePlayerCharacterMovement() {
