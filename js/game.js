@@ -15,6 +15,7 @@
   let obstacles;
   let background;
   let playerBullets;
+  let updateCount = 20;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/mon3_sprite_base.png', 64, 64, 5);
@@ -79,10 +80,15 @@
   }
 
   function handleMicInputData() {
-    analyser.getByteTimeDomainData(dataArray);
-    
-    if (dataArray[0] > 180) {
-      console.log('Threshold passed');
+    if (updateCount > 0) {
+      updateCount--;
+    } else {
+      updateCount = 20;
+      analyser.getByteTimeDomainData(dataArray);
+      
+      if (Math.max(...dataArray) > 200) {
+        console.log('AAAAAAAAAAAAAAAHH!');
+      }      
     }
   }
 
