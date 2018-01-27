@@ -6,6 +6,10 @@
   const BACKGROUND_SCROLL_SPEED = 2.5;
   const PLAYER_CHARACTER_MOVE_SPEED = 4;
   const PLAYER_BULLET_SPEED = 8;
+  const SQRT_TWO = Math.sqrt(2);
+
+/*  const OBSTACLE_SPAWN_FREQ = 100;*/
+/*  const randomGenerator = new Phaser.RandomDataGenerator();*/
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
@@ -24,15 +28,14 @@
   }
 
   function create() {
-    game.stage.backgroundColor = '#2d2d2d';
-    background = game.add.tileSprite(0, 0, 4000, 480, 'background');
-
+    background = game.add.tileSprite(0, 0, 640, 480, 'background');
+    game.world.setBounds(0, 0, 325, 480);
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
     game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.restitution = 0.8;
+    game.physics.p2.restitution = 1;
 
     obstacles = game.add.group();
 
@@ -41,7 +44,7 @@
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
-
+    playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 15, true);
 
@@ -49,14 +52,27 @@
 
   function handlePlayerCharacterMovement() {
     playerCharacter.body.setZeroVelocity();
-
-    let movingH = PLAYER_CHARACTER_MOVE_SPEED;
+    let movingH = SQRT_TWO;
+    let movingV = SQRT_TWO;
+    if(cursors.up.isDown || cursors.down.isDown){
+      movingH = 1;
+    }
+    if(cursors.left.isDown || cursors.right.isDown){
+      movingV = 1;
+    }
+    switch(true){
+      case cursors.left.isDown:
+        playerCharacter.body.moveLeft(200 * movingH);
+        break;
+      case cursors.right.isDown:
+        playerCharacter.body.moveRight(200 * movingH);
+    }
     switch(true){
       case cursors.down.isDown:
-        playerCharacter.body.moveDown(200);
+        playerCharacter.body.moveDown(200 * movingV);
         break;
       case cursors.up.isDown:
-        playerCharacter.body.moveUp(200);
+        playerCharacter.body.moveUp(200 * movingV);
         break;
     }
   }
@@ -68,7 +84,12 @@
   }
 
   function handlePlayerFire() {
-    playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 10, 'bullets', 0));
+    if(playerBullets.children.length === 0){
+      playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 10, 'bullets', 0));
+      playerBullets.children.forEach(bullet => {
+        bullet.lifespan = 300;
+      });
+    }
   }
 
   function handleObstacleScroll() {
@@ -92,6 +113,12 @@
     }
   }
 
+  function killBullet(){
+    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
+      playerBullets.children.splice(0, 1);
+    }
+  }
+
   function update() {
     handleBackgroundScroll();
     handlePlayerCharacterMovement();
@@ -101,6 +128,8 @@
     if (micSwitch) {
       handleMicInputData();
     }
+
+    killBullet();
   }
 
 })(window.Phaser);
