@@ -97,7 +97,7 @@
     background.tilePosition.x -= BACKGROUND_SCROLL_SPEED;
   }
   function killBullet(){
-    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan <= 0){
+    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       playerBullets.children.splice(0, 1);
     }
   }
