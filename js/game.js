@@ -43,6 +43,8 @@
 
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 15, true);
+
+    audioInput();
   }
 
   function handlePlayerCharacterMovement() {
