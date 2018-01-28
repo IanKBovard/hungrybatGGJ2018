@@ -9,7 +9,7 @@
   const SOUND_THRESHOLD = 200;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 1000 + game.rnd.integerInRange(1, 10);
+  let radius = 100 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
@@ -73,8 +73,8 @@
 
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
-    goldMoth = game.add.sprite(1200, 100, 'goldMoth', 0);
-    toothmathy = game.add.sprite(1175, 350, 'meatballmonster', 0);
+    goldMoth = game.add.sprite(1200, 90, 'goldMoth', 0);
+    toothmathy = game.add.sprite(1175, 325, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -263,6 +263,8 @@
           gameOverTooth.inputEnabled = true;
           gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
+        case body.sprite.key === 'goldMoth':
+
       }
     }else{
       console.log('you hit the wall!');
