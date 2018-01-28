@@ -18,6 +18,7 @@
   let titlePage;
   let gameOverMite;
   let gameOverMiteAnimation;
+  let instructionsPage;
 
   let playerBullets;
   let moth;
@@ -46,7 +47,7 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
-    game.load.image('instructions', '../assets/instructionsscreen.jpg');
+    game.load.image('tutorial', '../assets/tutorial.jpg');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
     game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
@@ -179,7 +180,11 @@
   }
   function actionOnClick(){
     titlePage.kill();
+    instructionsPage = game.add.button(0, 0, 'tutorial', onClick);
   }
+ function onClick(){
+  instructionsPage.kill();
+ }
   function blockHit(body){
     if(body){
       switch(true){
