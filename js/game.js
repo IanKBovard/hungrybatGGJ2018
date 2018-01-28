@@ -9,7 +9,7 @@
   const SOUND_THRESHOLD = 200;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 100 + game.rnd.integerInRange(1, 10);
+  let radius = 1000 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
@@ -24,6 +24,13 @@
   let instructionsPage;
   let gameOverTooth;
   let gameOverToothAnimation;
+
+  let themeSong;
+  let menuClickSound;
+  let toothCrunch;
+  let sonarSound;
+  let crashSound;
+  let slideSound;
 
   let playerBullets;
   let moth;
@@ -42,7 +49,15 @@
 
   let updateCount = 20;
   let bulletCountdown = 80;
+
   function preload() {
+    game.load.audio('theme', '../assets/music/HungryBatMainMP3.mp3');
+    game.load.audio('menuClick', '../assets/sounds/Menu_Cursor_Sound.wav');
+    game.load.audio('toothCrunch', '../assets/sounds/Monster_Crunch_Sound.wav');
+    game.load.audio('sonar', '../assets/sounds/Sonar_Sound.wav');
+    game.load.audio('crash', '../assets/sounds/Stalactite_Hurt_Sound.wav');
+    game.load.audio('slide', '../assets/sounds/Bat_Falls.wav');
+
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
     game.load.image('miteSmall', '../assets/miteSmall.png');
@@ -54,7 +69,7 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
-    game.load.spritesheet('gameOverTooth', '../assets/gameOverTooth.png', 640, 480)
+    game.load.spritesheet('gameOverTooth', '../assets/gameOverTooth.png', 640, 480);
     game.load.spritesheet('gameOverTite', '../assets/gameOverTite.png', 640, 480);
     game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
@@ -70,6 +85,12 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
+    themeSong = game.add.audio('theme', .5);
+    menuClickSound = game.add.audio('menuClick', 3);
+    toothCrunch = game.add.audio('toothCrunch', 6, 10);
+    sonarSound = game.add.audio('sonar', 1.5);
+    crashSound = game.add.audio('crash', 5);
+    themeSong.play();
 
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
@@ -132,6 +153,7 @@
 
     playerCharacter.body.clearShapes();
     playerCharacter.body.loadPolygon('physicsData', 'hungry_bat');
+
     titeSmall.body.clearShapes();
     titeSmall.body.loadPolygon('physicsData', 'titeSmall');
     titeMedium.body.clearShapes();
@@ -195,16 +217,19 @@
     titlePage = game.add.button(0, 0, 'title', actionOnClick);
   }
   function actionOnClick(){
+    menuClickSound.play();
     titlePage.kill();
     instructionsPage = game.add.button(0, 0, 'tutorial', onClick);
   }
  function onClick(){
+  menuClickSound.play();
   instructionsPage.kill();
  }
   function blockHit(body){
     if(body){
       switch(true){
         case body.sprite.key === 'titeSmall':
+          crashSound.play();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -213,6 +238,7 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'titeMedium':
+          crashSound.play();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -221,6 +247,7 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'titeLarge':
+          crashSound.play();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -229,6 +256,7 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'miteSmall':
+          crashSound.play();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -237,6 +265,7 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteMedium':
+          crashSound.play();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -245,6 +274,7 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteLarge':
+          crashSound.play();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -253,9 +283,11 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'moth':
+        menuClickSound.play();
           body.sprite.kill();
           break;
         case body.sprite.key === 'meatballmonster':
+          toothCrunch.play();
           gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
           gameOverTooth.fixedToCamera = true;
           gameOverToothAnimation = gameOverTooth.animations.add('gameOver3');
@@ -264,7 +296,8 @@
           gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'goldMoth':
-
+          console.log('YOU DID IT!');
+          break;
       }
     }else{
       console.log('you hit the wall!');
@@ -384,6 +417,7 @@
 
   function handlePlayerFire() {
     if(playerBullets.children.length === 0){
+      sonarSound.play();
       playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 25, 'bullets', 0));
       playerBullets.children.forEach(bullet => {
         bullet.lifespan = 250;
