@@ -6,6 +6,7 @@
   const PLAYER_CHARACTER_MOVE_SPEED = 4;
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
+  const SOUND_THRESHOLD = 200;
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
@@ -217,7 +218,7 @@
       updateCount = 20;
       analyser.getByteTimeDomainData(dataArray);
 
-      if (Math.max(...dataArray) > 200) {
+      if (Math.max(...dataArray) > SOUND_THRESHOLD) {
         handlePlayerFire();
       }
     }

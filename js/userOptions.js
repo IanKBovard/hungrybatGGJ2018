@@ -4,7 +4,8 @@ Handles the mic input used to control the echo-location of the bat
 
 */
 
-const gameOptions = document.getElementsByClassName("game-option");
+const gameOptions = document.getElementsByClassName("option-check");
+
 const analyser = Pizzicato.context.createAnalyser();
 analyser.fftSize = 2048;
 const bufferLength = analyser.frequencyBinCount;
