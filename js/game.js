@@ -33,7 +33,6 @@
   }
 
   function create() {
-
     background = game.add.sprite(0, 0, 'background');
     background.scale.set(2);
     game.world.setBounds(0, 0, 325, 480);
@@ -63,8 +62,10 @@
 
   function handlePlayerCharacterMovement() {
     playerCharacter.body.setZeroVelocity();
+
     let movingH = SQRT_TWO;
     let movingV = SQRT_TWO;
+
     if(cursors.up.isDown || cursors.down.isDown){
       movingH = 1;
     }
@@ -75,13 +76,11 @@
       case cursors.left.isDown:
         if(playerCharacter.body.x > 55){
           playerCharacter.body.moveLeft(200 * movingH);
-          background.mask.x -= 3.3 * movingH;
         }
         break;
       case cursors.right.isDown:
         if(playerCharacter.body.x < 270){
           playerCharacter.body.moveRight(200 * movingH);
-          background.mask.x += 3.3 * movingH;
         }
         break;
     }
@@ -89,13 +88,11 @@
       case cursors.down.isDown:
         if(playerCharacter.body.y < 430){
           playerCharacter.body.moveDown(200 * movingV);
-          background.mask.y += 3.3 * movingV;
         }
         break;
       case cursors.up.isDown:
         if(playerCharacter.body.y > 55){
           playerCharacter.body.moveUp(200 * movingV);
-          background.mask.y -= 3.3 * movingV;
         }
         break;
     }
@@ -104,11 +101,8 @@
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
       bullet.x += PLAYER_BULLET_SPEED;
-      background.mask.x += 9;
     });
   }
-
-
 
   function handlePlayerFire() {
     if(playerBullets.children.length === 0){
@@ -135,17 +129,14 @@
 
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
-      console.log(playerBullets.children)
-      background.mask.drawCircle(playerBullets.children[0].position.x, playerBullets.children[0].position.y, 100)
+      console.log('aslkdj',playerBullets.children[0]);
+      background.mask.drawCircle(playerBullets.children[0].previousPosition.x, playerBullets.children[0].previousPosition.y, 150);
       playerBullets.children.splice(0, 1);
-
     }
   }
-
   function update() {
     handlePlayerCharacterMovement();
     handleBulletAnimations();
-
     if (micSwitch) {
       handleMicInputData();
     }
