@@ -85,6 +85,7 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
+    console.log('aslkdjlasf',cursors);
     themeSong = game.add.audio('theme', .5);
     menuClickSound = game.add.audio('menuClick', 3);
     toothCrunch = game.add.audio('toothCrunch', 6, 10);
@@ -225,11 +226,26 @@
   menuClickSound.play();
   instructionsPage.kill();
  }
+  function disableKeys(){
+    cursors.down.isUp = true;
+    cursors.down.enabled = false;
+
+    cursors.up.isUp = true;
+    cursors.up.enabled = false;
+
+    cursors.left.isUp = true;
+    cursors.left.enabled = false;
+
+    cursors.right.isUp = true;
+    cursors.right.enabled = false;
+  }
   function blockHit(body){
     if(body){
       switch(true){
         case body.sprite.key === 'titeSmall':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -239,6 +255,8 @@
           break;
         case body.sprite.key === 'titeMedium':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -248,6 +266,8 @@
           break;
         case body.sprite.key === 'titeLarge':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -257,6 +277,8 @@
           break;
         case body.sprite.key === 'miteSmall':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -266,6 +288,8 @@
           break;
         case body.sprite.key === 'miteMedium':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -275,6 +299,8 @@
           break;
         case body.sprite.key === 'miteLarge':
           crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -288,6 +314,8 @@
           break;
         case body.sprite.key === 'meatballmonster':
           toothCrunch.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
           gameOverTooth.fixedToCamera = true;
           gameOverToothAnimation = gameOverTooth.animations.add('gameOver3');
@@ -297,6 +325,7 @@
           break;
         case body.sprite.key === 'goldMoth':
           console.log('YOU DID IT!');
+          body.sprite.kill();
           break;
       }
     }else{
