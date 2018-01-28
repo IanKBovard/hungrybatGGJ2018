@@ -253,7 +253,7 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'moth':
-          console.log(`you hit ${body.sprite.key}`);
+          body.sprite.kill();
           break;
         case body.sprite.key === 'meatballmonster':
           gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
