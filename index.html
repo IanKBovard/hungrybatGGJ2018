@@ -1,1 +1,53 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hungry Bat!</title>
+  <link href="https://fonts.googleapis.com/css?family=Cabin|Cinzel" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="navbar">
+    <div class="nav-content">
+      <a href="https://globalgamejam.org/" target="_blank">Game Jam</a>
+      <a href="https://globalgamejam.org/" target="_blank">Demo</a>
+    </div> 
+    <div class="nav-content">
+      <a href="https://github.com/IanKBovard/hungrybat/" target="_blank">GitHub</a>
+      <a href="https://devleague.com/" target="_blank">DevLeague</a>
+      <a href="http://acm.hawaii.edu/" target="_blank">ACM</a>
+    </div> 
+  </div>
+
+  <div class="container">
+    <div id="banner" class="content">
+      Hungry Bat
+    </div>
+
+    <div id="options-container" class="content">
+      <div>
+        Game Options
+      </div>
+      <input type="checkbox" class="option-check"></input><span class="game-option">mic input</span>
+    </div>
+
+    <div id="game-container">
+      <div id="game" class="content"></div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="footer-content">
+      <div>Global Game Jam Honolulu 2018</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.6.3/Pizzicato.min.js"></script>
+  <script src="js/audioInput.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser-ce/2.10.0/phaser.min.js"></script>
+  <script src="js/userOptions.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

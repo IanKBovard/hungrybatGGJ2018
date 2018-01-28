@@ -1,0 +1,87 @@
+/* Style Settings  */
+html, *, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background-color: #000000;
+  font-family: 'Cabin', sans-serif;
+}
+
+#navbar, #footer {
+  background-color: #DBD7D2;
+  width: 100%;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.nav-content, .footer-content {
+  width: 50%;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.nav-content > a, .footer-content > div {
+  text-decoration: none;
+  margin: 15px;
+  color: #000000;
+}
+
+#banner {
+  font-family: 'Cinzel', serif;
+  font-size: 50px;
+  color: #FF8C00;
+  margin-top: 50px;
+}
+
+.container {
+  width: 100%;
+}
+
+.content {
+  display: table;
+  margin: 25px auto;
+}
+
+#game-container {
+  margin: 20px;
+}
+
+#options-container {
+  text-align: center;
+}
+
+#options-container > div {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #FF8C00;
+}
+
+.game-option {
+  color: #FF8C00;
+}
