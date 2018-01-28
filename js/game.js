@@ -10,6 +10,8 @@
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
   let radius = 100 + game.rnd.integerInRange(1, 10);
+  let radiusBat = 50 + game.rnd.integerInRange(1, 10);
+
   let end;
   let cursors;
   let playerCharacter;
