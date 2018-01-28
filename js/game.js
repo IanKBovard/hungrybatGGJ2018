@@ -47,7 +47,7 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
-    game.load.image('tutorial', '../assets/tutorial.jpg');
+    game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
     game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
@@ -237,9 +237,7 @@
     updateShadowTexture();
 
     handlePlayerCharacterMovement();
-    //handleGameStart();
     handleBulletAnimations();
-    //handleCollisions();
     removeBulletFromArray();
     resetBulletTimer();
 
@@ -325,14 +323,6 @@
         break;
     }
   }
-/*  function handleGameStart(){
-    if(cursors.W.isDown){
-      console.log('w');
-    }
-  }
-*/  function handleCollisions() {
-    playerCharacter.body.onEndContact.add(handlePlayerHit);
-  }
 
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
@@ -380,12 +370,4 @@
       bulletCountdown = 80;
     }
   }
-  function handlePlayerHit() {
-    gameOver();
-  }
-
-  function gameOver() {
-    game.add.image(0, 0, 'gameOver');
-  }
-
 })(window.Phaser);
