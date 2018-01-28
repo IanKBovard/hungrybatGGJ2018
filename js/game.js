@@ -101,8 +101,7 @@
     moth.mask = playerCharacterMask;
     moth.mask.drawCircle(300, 350, 50);
     moth2.mask = playerCharacterMask;
-    moth.mask.drawCircle(600,250,50)
-    console.log('asdijoyhasdy',moth.mask)
+    moth.mask.drawCircle(600, 250, 50);
 
     toothmathy.mask = playerCharacterMask;
 
@@ -288,9 +287,7 @@
   }
 
   function gameOver() {
-    game.state.destroy();
-    end = game.add.sprite(0, 0, 'gameOver');
-    // game.add.text(70, 200, 'GAME OVER', { fill: '#FFFFFF' });
+    game.add.image(0, 0, 'gameOver');
   }
 
 })(window.Phaser);
