@@ -124,6 +124,8 @@
       analyser.getByteTimeDomainData(dataArray);
       
       if (Math.max(...dataArray) > 200) {
+        console.log('echolocation!');
+        
         handlePlayerFire();
       }      
     }

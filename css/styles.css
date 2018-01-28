@@ -16,6 +16,41 @@ body {
   background-color: cornflowerblue;
 }
 
+#navbar {
+  width: 100%;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  justify-content: center;
+
+  border: 1px solid black;
+}
+
+.nav-content {
+  width: 50%;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+
+  text-align: center;
+  margin: 10px;
+}
+
+.nav-content > a {
+  text-decoration: none;
+}
+
 #banner {
   font-size: 50px;
 }
@@ -29,22 +64,17 @@ body {
   margin: 50px auto;
 }
 
-#navbar {
-  width: 100%;
-
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-
-  flex-flow: row nowrap;
-  justify-content: center;
+#game-options {
+  padding: 10px;
+  border: 1px solid black;
+  text-align: center;
 }
 
-.nav-content {
-  border: 1px solid black;
-  
-  width: 50%;
-  text-align: center;
+#game-options > div {
+  margin: 10px;
+  font-size: 20px;
+}
+
+button {
+  margin: 10px;
 }
