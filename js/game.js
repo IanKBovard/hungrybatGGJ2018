@@ -10,6 +10,7 @@
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
+  let end;
   let playerCharacter;
   let playerCharacterFloat;
   let cursors;
@@ -30,10 +31,10 @@
     game.load.image('titeLarge', '../assets/titeLarge.png');
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
-
+    game.load.image('gameOver', '../assets/game_over.png');
   }
 
-  function create() {
+  function create() { 
     background = game.add.sprite(0, 0, 'background');
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -156,11 +157,13 @@
   function update() {
     handlePlayerCharacterMovement();
     handleBulletAnimations();
+    handleCollisions();
+    removeBulletFromArray();
+    resetBackground();
+
     if (micSwitch) {
       handleMicInputData();
     }
-    removeBulletFromArray();
-    resetBackground();
   }
 
   function handlePlayerCharacterMovement() {
@@ -192,9 +195,11 @@
         break;
     }
   }
-  function handleCollisions(){
 
+  function handleCollisions() {
+    playerCharacter.body.onEndContact.add(handlePlayerHit);
   }
+
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
       bullet.x += PLAYER_BULLET_SPEED;
@@ -230,6 +235,7 @@
       playerBullets.children.splice(0, 1);
     }
   }
+
   function resetBackground(){
     if(testCount === 0){
       //reset background
@@ -238,4 +244,15 @@
       testCount--;
     }
   }
+
+  function handlePlayerHit() {
+    gameOver();
+  }
+
+  function gameOver() {
+    game.state.destroy();
+    end = game.add.sprite(0, 0, 'gameOver');
+    // game.add.text(70, 200, 'GAME OVER', { fill: '#FFFFFF' });
+  }
+
 })(window.Phaser);
