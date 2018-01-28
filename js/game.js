@@ -16,6 +16,8 @@
   let playerCharacterFloat;
   let background;
   let titlePage;
+  let gameOverMite;
+  let gameOverMiteAnimation;
 
   let playerBullets;
   let moth;
@@ -44,9 +46,11 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
+    game.load.image('instructions', '../assets/instructionsscreen.jpg');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
-    game.load.image('title', '../assets/startscreen.jpg')
+    game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
+    game.load.spritesheet('gameOverMite', '../assets/gameOverMite.png', 640, 480);
   }
 
   function create() {
@@ -172,7 +176,6 @@
     game.camera.follow(playerCharacter);
     playerCharacter.body.onBeginContact.add(blockHit, this);
     titlePage = game.add.button(0, 0, 'title', actionOnClick);
-
   }
   function actionOnClick(){
     titlePage.kill();
@@ -190,13 +193,28 @@
           console.log(`you hit ${body.sprite.key}`);
           break;
         case body.sprite.key === 'miteSmall':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteMedium':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteLarge':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'moth':
           console.log(`you hit ${body.sprite.key}`);
