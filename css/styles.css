@@ -13,10 +13,11 @@ html, *, *:before, *:after {
 
 body {
   margin: 0;
-  background-color: cornflowerblue;
+  background-color: #000000;
 }
 
-#navbar {
+#navbar, #footer {
+  background-color: #DBD7D2;
   width: 100%;
 
   display: -webkit-box;
@@ -27,11 +28,9 @@ body {
 
   flex-flow: row nowrap;
   justify-content: center;
-
-  border: 1px solid black;
 }
 
-.nav-content {
+.nav-content, .footer-content {
   width: 50%;
 
   display: -webkit-box;
@@ -41,18 +40,20 @@ body {
   display: flex;
 
   flex-flow: row nowrap;
-  justify-content: space-evenly;
+  justify-content: center;
 
   text-align: center;
-  margin: 15px;
 }
 
-.nav-content > a {
+.nav-content > a, .footer-content > div {
   text-decoration: none;
+  margin: 15px;
+  color: #000000;
 }
 
 #banner {
   font-size: 50px;
+  color: #FF8C00;
 }
 
 .container {
