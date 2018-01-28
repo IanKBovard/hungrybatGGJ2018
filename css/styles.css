@@ -14,6 +14,7 @@ html, *, *:before, *:after {
 body {
   margin: 0;
   background-color: #000000;
+  font-family: 'Cabin', sans-serif;
 }
 
 #navbar, #footer {
@@ -52,8 +53,10 @@ body {
 }
 
 #banner {
+  font-family: 'Cinzel', serif;
   font-size: 50px;
   color: #FF8C00;
+  margin-top: 50px;
 }
 
 .container {
@@ -62,16 +65,23 @@ body {
 
 .content {
   display: table;
-  margin: 50px auto;
+  margin: 25px auto;
+}
+
+#game-container {
+  margin: 20px;
 }
 
 #options-container {
-  padding: 10px;
-  border: 1px solid black;
   text-align: center;
 }
 
 #options-container > div {
-  margin: 10px;
+  margin-bottom: 10px;
   font-size: 20px;
+  color: #FF8C00;
+}
+
+.game-option {
+  color: #FF8C00;
 }
