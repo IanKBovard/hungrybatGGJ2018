@@ -15,8 +15,7 @@
   let playerCharacter;
   let playerCharacterFloat;
   let background;
-/*  let titlePage;
-  let title*/;
+  let titlePage;
 
   let playerBullets;
   let moth;
@@ -46,6 +45,7 @@
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
     game.load.physics('physicsData', '../assets/sprite_physics.json');
+    game.load.image('title', '../assets/startscreen.jpg')
     game.load.image('gameOver', '../assets/game_over.png');
   }
 
@@ -171,8 +171,11 @@
 
     game.camera.follow(playerCharacter);
     playerCharacter.body.onBeginContact.add(blockHit, this);
-/*    titlePage = game.add.sprite(0, 0, 'background');
-    title = game.add.text(265,200, 'hungry bat')*/;
+    titlePage = game.add.button(0, 0, 'title', actionOnClick);
+
+  }
+  function actionOnClick(){
+    titlePage.kill();
   }
   function blockHit(body){
     if(body){
