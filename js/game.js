@@ -16,6 +16,7 @@
   let playerBullets;
   let playerCharacterMask;
   let updateCount = 20;
+  let testCount = 120;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
@@ -23,12 +24,11 @@
     game.load.image('miteSmall', '../assets/miteSmall.png');
     game.load.image('miteMedium', '../assets/miteMedium.png');
     game.load.image('miteLarge', '../assets/miteLarge.png');
-
     game.load.image('titeSmall', '../assets/titeSmall.png');
     game.load.image('titeMedium', '../assets/titeMedium.png');
     game.load.image('titeLarge', '../assets/titeLarge.png');
-    //placeholders
-    game.load.spritesheet('bullets', '../assets/spr_bullet_strip04.png', 28, 28);
+    game.load.spritesheet('bullets', '../assets/sonar.png');
+    game.load.physics('physicsData', '../assets/sprite_physics.json');
 
   }
 
@@ -38,28 +38,28 @@
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
-    titeSmall = game.add.sprite(150, 0, 'titeSmall');
-    titeMedium = game.add.sprite(250, 0, 'titeMedium');
-    titeLarge = game.add.sprite(350, 0, 'titeLarge');
+    titeSmall = game.add.sprite(150, 50, 'titeSmall');
+    titeMedium = game.add.sprite(275, 100, 'titeMedium');
+    titeLarge = game.add.sprite(350, 100, 'titeLarge');
 
-    titeSmall2 = game.add.sprite(700, 0, 'titeSmall');
-    titeMedium2 = game.add.sprite(625, 0, 'titeMedium');
-    titeLarge2 = game.add.sprite(500, -100, 'titeLarge');
+    titeSmall2 = game.add.sprite(700, 80, 'titeSmall');
+    titeMedium2 = game.add.sprite(625, 100, 'titeMedium');
+    titeLarge2 = game.add.sprite(500, 100, 'titeLarge');
 
-    titeSmall3 = game.add.sprite(1000, 0, 'titeSmall');
-    titeMedium3 = game.add.sprite(1100, 0, 'titeMedium');
+    titeSmall3 = game.add.sprite(1000, 80, 'titeSmall');
+    titeMedium3 = game.add.sprite(1100, 100, 'titeMedium');
 
-    miteSmall = game.add.sprite(500, 370, 'miteSmall');
-    miteMedium = game.add.sprite(550, 315, 'miteMedium');
-    miteLarge = game.add.sprite(150, 270, 'miteLarge');
+    miteSmall = game.add.sprite(500, 450, 'miteSmall');
+    miteMedium = game.add.sprite(625, 440, 'miteMedium');
+    miteLarge = game.add.sprite(150, 400, 'miteLarge');
 
-    miteSmall2 = game.add.sprite(700, 370, 'miteSmall');
-    miteMedium2 = game.add.sprite(750, 315, 'miteMedium');
-    miteLarge2 = game.add.sprite(900, 270, 'miteLarge');
+    miteSmall2 = game.add.sprite(800, 440, 'miteSmall');
+    miteMedium2 = game.add.sprite(750, 400, 'miteMedium');
+    miteLarge2 = game.add.sprite(1000, 400, 'miteLarge');
 
     playerCharacterMask = game.add.graphics(0, 0);
     playerCharacterMask.beginFill(0xffffff);
-    playerCharacterMask.drawCircle(0, 0);
+    playerCharacterMask.drawCircle(0, 0, 10000);
 
     titeSmall.mask = playerCharacterMask;
     titeMedium.mask = playerCharacterMask;
@@ -80,20 +80,86 @@
     miteMedium2.mask = playerCharacterMask;
     miteLarge2.mask = playerCharacterMask;
 
+
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
 
-    obstacles = game.add.group();
     playerBullets = game.add.group();
 
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
     background.mask = playerCharacterMask;
 
-    game.physics.p2.enable(playerCharacter);
+    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets ], true);
+
+
+    titeSmall.body.static = true;
+    titeMedium.body.static = true;
+    titeLarge.body.static = true;
+
+    titeSmall2 .body.static = true;
+    titeMedium2.body.static = true;
+    titeLarge2.body.static = true;
+
+    titeSmall3.body.static = true;
+    titeMedium3.body.static = true;
+
+    miteSmall.body.static = true;
+    miteMedium.body.static = true;
+    miteLarge.body.static = true;
+
+    miteSmall2.body.static = true;
+    miteMedium2.body.static = true;
+    miteLarge2.body.static = true;
+
+    playerCharacter.body.clearShapes();
+    playerCharacter.body.loadPolygon('physicsData', 'hungry_bat');
+    titeSmall.body.clearShapes();
+    titeSmall.body.loadPolygon('physicsData', 'titeSmall');
+    titeMedium.body.clearShapes();
+    titeMedium.body.loadPolygon('physicsData', 'titeMedium');
+    titeLarge.body.clearShapes();
+    titeLarge.body.loadPolygon('physicsData', 'titeLarge');
+
+    titeSmall2.body.clearShapes();
+    titeSmall2.body.loadPolygon('physicsData', 'titeSmall');
+    titeMedium2.body.clearShapes();
+    titeMedium2.body.loadPolygon('physicsData', 'titeMedium');
+    titeLarge2.body.clearShapes();
+    titeLarge2.body.loadPolygon('physicsData', 'titeLarge');
+
+    titeSmall3.body.clearShapes();
+    titeSmall3.body.loadPolygon('physicsData', 'titeSmall');
+    titeMedium3.body.clearShapes();
+    titeMedium3.body.loadPolygon('physicsData', 'titeMedium');
+
+    miteSmall.body.clearShapes();
+    miteSmall.body.loadPolygon('physicsData', 'miteSmall');
+    miteMedium.body.clearShapes();
+    miteMedium.body.loadPolygon('physicsData', 'miteMedium');
+    miteLarge.body.clearShapes();
+    miteLarge.body.loadPolygon('physicsData', 'miteLarge');
+
+    miteSmall2.body.clearShapes();
+    miteSmall2.body.loadPolygon('physicsData', 'miteSmall');
+    miteMedium2.body.clearShapes();
+    miteMedium2.body.loadPolygon('physicsData', 'miteMedium');
+    miteLarge2.body.clearShapes();
+    miteLarge2.body.loadPolygon('physicsData', 'miteLarge');
+
     playerCharacter.body.collideWorldBounds = true;
     playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 12, true);
+  }
+
+  function update() {
+    handlePlayerCharacterMovement();
+    handleBulletAnimations();
+    if (micSwitch) {
+      handleMicInputData();
+    }
+    removeBulletFromArray();
+    resetBackground();
   }
 
   function handlePlayerCharacterMovement() {
@@ -125,7 +191,9 @@
         break;
     }
   }
+  function handleCollisions(){
 
+  }
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
       bullet.x += PLAYER_BULLET_SPEED;
@@ -134,7 +202,7 @@
 
   function handlePlayerFire() {
     if(playerBullets.children.length === 0){
-      playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 10, 'bullets', 0));
+      playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 25, 'bullets', 0));
       playerBullets.children.forEach(bullet => {
         bullet.lifespan = 300;
       });
@@ -150,8 +218,6 @@
       analyser.getByteTimeDomainData(dataArray);
 
       if (Math.max(...dataArray) > 200) {
-        console.log('echolocation!');
-        
         handlePlayerFire();
       }
     }
@@ -163,13 +229,12 @@
       playerBullets.children.splice(0, 1);
     }
   }
-  function update() {
-    handlePlayerCharacterMovement();
-    handleBulletAnimations();
-    if (micSwitch) {
-      handleMicInputData();
+  function resetBackground(){
+    if(testCount === 0){
+      //reset background
     }
-    removeBulletFromArray();
+    if(testCount > 0){
+      testCount--;
+    }
   }
-
 })(window.Phaser);
