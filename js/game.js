@@ -16,6 +16,11 @@
   let playerCharacterFloat;
   let background;
   let titlePage;
+  let gameOverMite;
+  let gameOverMiteAnimation;
+  let gameOverTite;
+  let gameOverTiteAnimation;
+  let instructionsPage;
 
   let playerBullets;
   let moth;
@@ -44,9 +49,12 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
+    game.load.spritesheet('gameOverTite', '../assets/gameOverTite.png', 640, 480);
+    game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
-    game.load.image('title', '../assets/startscreen.jpg')
+    game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
+    game.load.spritesheet('gameOverMite', '../assets/gameOverMite.png', 640, 480);
   }
 
   function create() {
@@ -172,31 +180,64 @@
     game.camera.follow(playerCharacter);
     playerCharacter.body.onBeginContact.add(blockHit, this);
     titlePage = game.add.button(0, 0, 'title', actionOnClick);
-
   }
   function actionOnClick(){
     titlePage.kill();
+    instructionsPage = game.add.button(0, 0, 'tutorial', onClick);
   }
+ function onClick(){
+  instructionsPage.kill();
+ }
   function blockHit(body){
     if(body){
       switch(true){
         case body.sprite.key === 'titeSmall':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'titeMedium':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'titeLarge':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'miteSmall':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteMedium':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteLarge':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
+          gameOverMite.fixedToCamera = true;
+          gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
+          gameOverMite.animations.play('gameOver1', 2.5, false);
+          gameOverMite.inputEnabled = true;
+          gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'moth':
           console.log(`you hit ${body.sprite.key}`);
@@ -214,9 +255,7 @@
     updateShadowTexture();
 
     handlePlayerCharacterMovement();
-    //handleGameStart();
     handleBulletAnimations();
-    //handleCollisions();
     removeBulletFromArray();
     resetBulletTimer();
 
@@ -230,7 +269,7 @@
     let playerCharacterX = playerCharacter.x - game.camera.x;
     let playerCharacterY = playerCharacter.y - game.camera.y;
     let gradientPC = shadowTexture.context.createRadialGradient( playerCharacterX, playerCharacterY, 100 * 0.75, playerCharacterX, playerCharacterY, radius);
-    gradientPC.addColorStop(0, 'rgba(255, 255, 255, .45)')
+    gradientPC.addColorStop(0, 'rgba(255, 255, 255, 1)')
     gradientPC.addColorStop(1, 'rgba(255,255,255,0.0)');
     shadowTexture.context.beginPath();
     shadowTexture.context.fillStyle = gradientPC;
@@ -263,7 +302,7 @@
       let bulletX = playerBullets.children[0].x - game.camera.x;
       let bulletY = playerBullets.children[0].y - game.camera.y;
       let gradientBullet = shadowTexture.context.createRadialGradient(bulletX, bulletY, 100 * 0.75, bulletX, bulletY, radius);
-      gradientBullet.addColorStop(0, 'rgba(255, 255, 255, .75)');
+      gradientBullet.addColorStop(0, 'rgba(255, 255, 255, 1)');
       gradientBullet.addColorStop(1, 'rgba(255,255,255,0.0)');
       shadowTexture.context.beginPath();
       shadowTexture.context.fillStyle = gradientBullet;
@@ -301,14 +340,6 @@
           playerCharacter.body.moveUp(200 * movingV);
         break;
     }
-  }
-/*  function handleGameStart(){
-    if(cursors.W.isDown){
-      console.log('w');
-    }
-  }
-*/  function handleCollisions() {
-    playerCharacter.body.onEndContact.add(handlePlayerHit);
   }
 
   function handleBulletAnimations() {
@@ -357,12 +388,4 @@
       bulletCountdown = 80;
     }
   }
-  function handlePlayerHit() {
-    gameOver();
-  }
-
-  function gameOver() {
-    game.add.image(0, 0, 'gameOver');
-  }
-
 })(window.Phaser);
