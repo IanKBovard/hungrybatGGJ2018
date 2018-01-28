@@ -18,6 +18,8 @@
   let titlePage;
   let gameOverMite;
   let gameOverMiteAnimation;
+  let gameOverTite;
+  let gameOverTiteAnimation;
   let instructionsPage;
 
   let playerBullets;
@@ -47,6 +49,7 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
+    game.load.spritesheet('gameOverTite', '../assets/gameOverTite.png', 640, 480);
     game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
     game.load.image('title', '../assets/startscreen.jpg');
@@ -189,13 +192,28 @@
     if(body){
       switch(true){
         case body.sprite.key === 'titeSmall':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'titeMedium':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'titeLarge':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
+          gameOverTite.fixedToCamera = true;
+          gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
+          gameOverTite.animations.play('gameOver2', 2.5, false);
+          gameOverTite.inputEnabled = true;
+          gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'miteSmall':
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
@@ -251,7 +269,7 @@
     let playerCharacterX = playerCharacter.x - game.camera.x;
     let playerCharacterY = playerCharacter.y - game.camera.y;
     let gradientPC = shadowTexture.context.createRadialGradient( playerCharacterX, playerCharacterY, 100 * 0.75, playerCharacterX, playerCharacterY, radius);
-    gradientPC.addColorStop(0, 'rgba(255, 255, 255, .45)')
+    gradientPC.addColorStop(0, 'rgba(255, 255, 255, 1)')
     gradientPC.addColorStop(1, 'rgba(255,255,255,0.0)');
     shadowTexture.context.beginPath();
     shadowTexture.context.fillStyle = gradientPC;
@@ -284,7 +302,7 @@
       let bulletX = playerBullets.children[0].x - game.camera.x;
       let bulletY = playerBullets.children[0].y - game.camera.y;
       let gradientBullet = shadowTexture.context.createRadialGradient(bulletX, bulletY, 100 * 0.75, bulletX, bulletY, radius);
-      gradientBullet.addColorStop(0, 'rgba(255, 255, 255, .75)');
+      gradientBullet.addColorStop(0, 'rgba(255, 255, 255, 1)');
       gradientBullet.addColorStop(1, 'rgba(255,255,255,0.0)');
       shadowTexture.context.beginPath();
       shadowTexture.context.fillStyle = gradientBullet;
