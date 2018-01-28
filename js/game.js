@@ -19,14 +19,15 @@
   let obstacles;
   let background;
   let playerBullets;
-  let mask;
+  let playerCharacterMask;
+  let bulletMask;
   let updateCount = 20;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
+    game.load.image('background', '../assets/background.jpg');
 
     //placeholders
-    game.load.image('background', '../assets/bg_1_1.png');
     game.load.spritesheet('bullets', '../assets/spr_bullet_strip04.png', 28, 28);
 
   }
@@ -40,10 +41,9 @@
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
-    mask = game.add.graphics(0, 0);
-    mask.beginFill(0xffffff);
-    mask.drawCircle(60, 200, 120);
-    console.log(';asjlkhfh',mask.blendMode);
+    playerCharacterMask = game.add.graphics(0, 0);
+    playerCharacterMask.beginFill(0xffffff);
+    playerCharacterMask.drawCircle(0, 0);
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
@@ -52,7 +52,7 @@
     playerBullets = game.add.group();
 
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
-    background.mask = mask;
+    background.mask = playerCharacterMask;
 
     game.physics.p2.enable(playerCharacter);
     playerCharacter.body.collideWorldBounds = true;
@@ -103,10 +103,12 @@
 
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
-      bullet.mask = mask;
       bullet.x += PLAYER_BULLET_SPEED;
+      background.mask.x += 9;
     });
   }
+
+
 
   function handlePlayerFire() {
     if(playerBullets.children.length === 0){
@@ -133,7 +135,10 @@
 
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
+      console.log(playerBullets.children)
+      background.mask.drawCircle(playerBullets.children[0].position.x, playerBullets.children[0].position.y, 100)
       playerBullets.children.splice(0, 1);
+
     }
   }
 
