@@ -1,32 +1,32 @@
 (Phaser => {
-  const GAME_WIDTH = 640;
+  const GAME_WIDTH = 1360;
   const GAME_HEIGHT = 480;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
-  const BACKGROUND_SCROLL_SPEED = 2;
   const PLAYER_CHARACTER_MOVE_SPEED = 4;
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
-
-/*  const OBSTACLE_SPAWN_FREQ = 100;
-  const randomGenerator = new Phaser.RandomDataGenerator();*/
 
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
   let playerCharacter;
   let playerCharacterFloat;
   let cursors;
-  let obstacles;
   let background;
   let playerBullets;
   let playerCharacterMask;
-  let bulletMask;
   let updateCount = 20;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
+    game.load.image('miteSmall', '../assets/miteSmall.png');
+    game.load.image('miteMedium', '../assets/miteMedium.png');
+    game.load.image('miteLarge', '../assets/miteLarge.png');
 
+    game.load.image('titeSmall', '../assets/titeSmall.png');
+    game.load.image('titeMedium', '../assets/titeMedium.png');
+    game.load.image('titeLarge', '../assets/titeLarge.png');
     //placeholders
     game.load.spritesheet('bullets', '../assets/spr_bullet_strip04.png', 28, 28);
 
@@ -34,15 +34,51 @@
 
   function create() {
     background = game.add.sprite(0, 0, 'background');
-    background.scale.set(2);
-    game.world.setBounds(0, 0, 325, 480);
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
+    titeSmall = game.add.sprite(150, 0, 'titeSmall');
+    titeMedium = game.add.sprite(250, 0, 'titeMedium');
+    titeLarge = game.add.sprite(350, 0, 'titeLarge');
+
+    titeSmall2 = game.add.sprite(700, 0, 'titeSmall');
+    titeMedium2 = game.add.sprite(625, 0, 'titeMedium');
+    titeLarge2 = game.add.sprite(500, -100, 'titeLarge');
+
+    titeSmall3 = game.add.sprite(1000, 0, 'titeSmall');
+    titeMedium3 = game.add.sprite(1100, 0, 'titeMedium');
+
+    miteSmall = game.add.sprite(500, 370, 'miteSmall');
+    miteMedium = game.add.sprite(550, 315, 'miteMedium');
+    miteLarge = game.add.sprite(150, 270, 'miteLarge');
+
+    miteSmall2 = game.add.sprite(700, 370, 'miteSmall');
+    miteMedium2 = game.add.sprite(750, 315, 'miteMedium');
+    miteLarge2 = game.add.sprite(900, 270, 'miteLarge');
+
     playerCharacterMask = game.add.graphics(0, 0);
     playerCharacterMask.beginFill(0xffffff);
     playerCharacterMask.drawCircle(0, 0);
+
+    titeSmall.mask = playerCharacterMask;
+    titeMedium.mask = playerCharacterMask;
+    titeLarge.mask = playerCharacterMask;
+
+    titeSmall2 .mask = playerCharacterMask;
+    titeMedium2.mask = playerCharacterMask;
+    titeLarge2.mask = playerCharacterMask;
+
+    titeSmall3.mask = playerCharacterMask;
+    titeMedium3.mask = playerCharacterMask;
+
+    miteSmall.mask = playerCharacterMask;
+    miteMedium.mask = playerCharacterMask;
+    miteLarge.mask = playerCharacterMask;
+
+    miteSmall2.mask = playerCharacterMask;
+    miteMedium2.mask = playerCharacterMask;
+    miteLarge2.mask = playerCharacterMask;
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
@@ -74,26 +110,18 @@
     }
     switch(true){
       case cursors.left.isDown:
-        if(playerCharacter.body.x > 55){
           playerCharacter.body.moveLeft(200 * movingH);
-        }
         break;
       case cursors.right.isDown:
-        if(playerCharacter.body.x < 270){
           playerCharacter.body.moveRight(200 * movingH);
-        }
         break;
     }
     switch(true){
       case cursors.down.isDown:
-        if(playerCharacter.body.y < 430){
           playerCharacter.body.moveDown(200 * movingV);
-        }
         break;
       case cursors.up.isDown:
-        if(playerCharacter.body.y > 55){
           playerCharacter.body.moveUp(200 * movingV);
-        }
         break;
     }
   }
@@ -129,7 +157,6 @@
 
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
-      console.log('aslkdj',playerBullets.children[0]);
       background.mask.drawCircle(playerBullets.children[0].previousPosition.x, playerBullets.children[0].previousPosition.y, 150);
       playerBullets.children.splice(0, 1);
     }
@@ -140,7 +167,6 @@
     if (micSwitch) {
       handleMicInputData();
     }
-
     removeBulletFromArray();
   }
 
