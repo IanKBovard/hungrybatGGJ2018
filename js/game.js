@@ -15,6 +15,12 @@
   let background;
   let playerBullets;
   let playerCharacterMask;
+  let moth;
+  let moth2;
+  let mothAnimate;
+  let mothAnimate2;
+  let toothmathy;
+  let toothmathyIdle;
   let updateCount = 20;
   let testCount = 120;
 
@@ -28,6 +34,8 @@
     game.load.image('titeMedium', '../assets/titeMedium.png');
     game.load.image('titeLarge', '../assets/titeLarge.png');
     game.load.spritesheet('bullets', '../assets/sonar.png');
+    game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
+    game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
     game.load.physics('physicsData', '../assets/sprite_physics.json');
 
   }
@@ -37,6 +45,10 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
+
+    moth = game.add.sprite(300, 350, 'moth', 0);
+    moth2 = game.add.sprite(600, 250, 'moth', 0);
+    toothmathy = game.add.sprite(1100, 300, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -59,7 +71,7 @@
 
     playerCharacterMask = game.add.graphics(0, 0);
     playerCharacterMask.beginFill(0xffffff);
-    playerCharacterMask.drawCircle(0, 0, 10974897);
+    playerCharacterMask.drawCircle(0, 0);
 
     titeSmall.mask = playerCharacterMask;
     titeMedium.mask = playerCharacterMask;
@@ -80,6 +92,10 @@
     miteMedium2.mask = playerCharacterMask;
     miteLarge2.mask = playerCharacterMask;
 
+    moth.mask = playerCharacterMask;
+    moth2.mask = playerCharacterMask;
+
+    toothmathy.mask = playerCharacterMask;
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
@@ -89,7 +105,7 @@
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
     background.mask = playerCharacterMask;
 
-    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets ]);
+    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
 
 
     titeSmall.body.static = true;
@@ -146,10 +162,26 @@
     miteLarge2.body.clearShapes();
     miteLarge2.body.loadPolygon('physicsData', 'miteLarge');
 
+    moth.body.clearShapes();
+    moth.body.loadPolygon('physicsData', 'moth');
+
+    moth2.body.clearShapes();
+    moth2.body.loadPolygon('physicsData', 'moth');
+
+    toothmathy.body.clearShapes();
+    toothmathy.body.loadPolygon('physicsData', 'meatballmonster');
+
     playerCharacter.body.collideWorldBounds = true;
     playerCharacter.body.fixedRotation = true;
     playerCharacterFloat = playerCharacter.animations.add('idleFloat');
     playerCharacter.animations.play('idleFloat', 12, true);
+
+    mothAnimate = moth.animations.add('mothIdle');
+    mothAnimate2 = moth2.animations.add('mothIdle2');
+    moth.animations.play('mothIdle', 15, true);
+    moth2.animations.play('mothIdle2', 15, true);
+    toothmathyIdle = toothmathy.animations.add('toothIdle');
+    toothmathy.animations.play('toothIdle', 8, true);
   }
 
   function update() {
