@@ -17,6 +17,7 @@
   let background;
 
   let playerBullets;
+  let playerBulletsLight;
   let moth;
   let mothShadow;
   let moth2;
@@ -30,7 +31,7 @@
   let lightSprite;
 
   let updateCount = 20;
-
+  let bulletCountdown = 80;
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
@@ -84,9 +85,11 @@
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
+    game.physics.p2.setImpactEvents(true);
 
     playerBullets = game.add.group();
-
+    playerBulletsLight = game.add.group();
+    playerBulletsLight.lifespan = 400;
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
 
     game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
@@ -109,7 +112,6 @@
     miteSmall2.body.static = true;
     miteMedium2.body.static = true;
     miteLarge2.body.static = true;
-
     playerCharacter.body.clearShapes();
     playerCharacter.body.loadPolygon('physicsData', 'hungry_bat');
     titeSmall.body.clearShapes();
@@ -177,7 +179,7 @@
     handleBulletAnimations();
     //handleCollisions();
     removeBulletFromArray();
-    //resetBackground();
+    resetBulletTimer();
 
     if (micSwitch) {
       handleMicInputData();
@@ -218,7 +220,20 @@
     shadowTexture.context.arc(moth2X, moth2Y, radius, 0, Math.PI * 2, false);
     shadowTexture.context.fill();
     shadowTexture.dirty = true;
+    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
+      let bulletX = playerBullets.children[0].x - game.camera.x;
+      let bulletY = playerBullets.children[0].y - game.camera.y;
+      let gradientBullet = shadowTexture.context.createRadialGradient(bulletX, bulletY, 100 * 0.75, bulletX, bulletY, radius);
+      gradientBullet.addColorStop(0, 'rgba(255, 255, 255, .75)');
+      gradientBullet.addColorStop(1, 'rgba(255,255,255,0.0)');
+      shadowTexture.context.beginPath();
+      shadowTexture.context.fillStyle = gradientBullet;
+      shadowTexture.context.arc(bulletX, bulletY, radius, 0, Math.PI * 2, false);
+      shadowTexture.context.fill();
+      shadowTexture.dirty = true;
+    }
   }
+
   function handlePlayerCharacterMovement() {
     playerCharacter.body.setZeroVelocity();
 
@@ -255,7 +270,9 @@
 
   function handleBulletAnimations() {
     playerBullets.children.forEach(bullet => {
-      bullet.x += PLAYER_BULLET_SPEED;
+      if(bullet.lifespan > 0){
+        bullet.x += PLAYER_BULLET_SPEED;
+      }
     });
   }
 
@@ -263,7 +280,7 @@
     if(playerBullets.children.length === 0){
       playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 25, 'bullets', 0));
       playerBullets.children.forEach(bullet => {
-        bullet.lifespan = 300;
+        bullet.lifespan = 250;
       });
     }
   }
@@ -281,23 +298,22 @@
       }
     }
   }
-
   function removeBulletFromArray(){
-    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
-/*      background.mask.drawCircle(playerBullets.children[0].previousPosition.x, playerBullets.children[0].previousPosition.y, 150);*/
-      playerBullets.children.splice(0, 1);
+    if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan <= 0){
+      if(bulletCountdown === 1){
+        bulletCountdown--;
+        playerBullets.children.splice(0, 1);
+      }
+      if(bulletCountdown > 1){
+        bulletCountdown--
+      }
     }
   }
-
- /* function resetBackground(){
-    if(testCount === 0){
-      //reset background
-    }
-    if(testCount > 0){
-      testCount--;
+  function resetBulletTimer(){
+    if(bulletCountdown === 0){
+      bulletCountdown = 80;
     }
   }
-*/
   function handlePlayerHit() {
     gameOver();
   }
