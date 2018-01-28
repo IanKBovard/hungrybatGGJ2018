@@ -59,7 +59,7 @@
 
     playerCharacterMask = game.add.graphics(0, 0);
     playerCharacterMask.beginFill(0xffffff);
-    playerCharacterMask.drawCircle(0, 0, 10000);
+    playerCharacterMask.drawCircle(0, 0, 10974897);
 
     titeSmall.mask = playerCharacterMask;
     titeMedium.mask = playerCharacterMask;
@@ -89,7 +89,7 @@
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
     background.mask = playerCharacterMask;
 
-    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets ], true);
+    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets ]);
 
 
     titeSmall.body.static = true;
