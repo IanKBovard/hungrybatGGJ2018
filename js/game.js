@@ -1,5 +1,5 @@
 (Phaser => {
-  const GAME_WIDTH = 1360;
+  const GAME_WIDTH = 680;
   const GAME_HEIGHT = 480;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
@@ -7,28 +7,29 @@
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
   const SOUND_THRESHOLD = 200;
-
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
+  let radius = 100 + game.rnd.integerInRange(1, 10);
   let end;
+  let cursors;
   let playerCharacter;
   let playerCharacterFloat;
-  let cursors;
   let background;
+
   let playerBullets;
-  let playerCharacterMask;
   let moth;
+  let mothShadow;
   let moth2;
   let mothAnimate;
   let mothAnimate2;
   let toothmathy;
   let toothmathyIdle;
 
+  let bitmap;
   let shadowTexture;
   let lightSprite;
 
   let updateCount = 20;
-  let testCount = 120;
 
   function preload() {
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
@@ -47,6 +48,7 @@
   }
 
   function create() {
+    game.world.setBounds(0, 0, 1280, 480);
     background = game.add.sprite(0, 0, 'background');
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -75,35 +77,10 @@
     miteMedium2 = game.add.sprite(750, 400, 'miteMedium');
     miteLarge2 = game.add.sprite(1000, 400, 'miteLarge');
 
-    playerCharacterMask = game.add.graphics(0, 0);
-    playerCharacterMask.beginFill(0xffffff);
-    playerCharacterMask.drawCircle(0, 0);
+    shadowTexture = game.add.bitmapData(1360, 480);
 
-    titeSmall.mask = playerCharacterMask;
-    titeMedium.mask = playerCharacterMask;
-    titeLarge.mask = playerCharacterMask;
-
-    titeSmall2 .mask = playerCharacterMask;
-    titeMedium2.mask = playerCharacterMask;
-    titeLarge2.mask = playerCharacterMask;
-
-    titeSmall3.mask = playerCharacterMask;
-    titeMedium3.mask = playerCharacterMask;
-
-    miteSmall.mask = playerCharacterMask;
-    miteMedium.mask = playerCharacterMask;
-    miteLarge.mask = playerCharacterMask;
-
-    miteSmall2.mask = playerCharacterMask;
-    miteMedium2.mask = playerCharacterMask;
-    miteLarge2.mask = playerCharacterMask;
-
-    moth.mask = playerCharacterMask;
-    moth.mask.drawCircle(300, 350, 50);
-    moth2.mask = playerCharacterMask;
-    moth.mask.drawCircle(600, 250, 50);
-
-    toothmathy.mask = playerCharacterMask;
+    lightSprite = game.add.image(game.camera.x, game.camera.y, shadowTexture);
+    lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.8;
@@ -111,7 +88,6 @@
     playerBullets = game.add.group();
 
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
-    background.mask = playerCharacterMask;
 
     game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
 
@@ -189,20 +165,60 @@
     moth2.animations.play('mothIdle2', 15, true);
     toothmathyIdle = toothmathy.animations.add('toothIdle');
     toothmathy.animations.play('toothIdle', 8, true);
+
+    game.camera.follow(playerCharacter);
   }
 
   function update() {
+    lightSprite.reset(game.camera.x, game.camera.y);
+    updateShadowTexture();
+
     handlePlayerCharacterMovement();
     handleBulletAnimations();
-    handleCollisions();
+    //handleCollisions();
     removeBulletFromArray();
-    resetBackground();
+    //resetBackground();
 
     if (micSwitch) {
       handleMicInputData();
     }
   }
+  function updateShadowTexture(){
+    shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
+    shadowTexture.context.fillRect(0, 0, 1360, 480);
+    let playerCharacterX = playerCharacter.x - game.camera.x;
+    let playerCharacterY = playerCharacter.y - game.camera.y;
+    let gradientPC = shadowTexture.context.createRadialGradient( playerCharacterX, playerCharacterY, 100 * 0.75, playerCharacterX, playerCharacterY, radius);
+    gradientPC.addColorStop(0, 'rgba(255, 255, 255, .45)')
+    gradientPC.addColorStop(1, 'rgba(255,255,255,0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradientPC;
+    shadowTexture.context.arc(playerCharacterX, playerCharacterY, radius, 0, Math.PI * 2, false);
+    shadowTexture.context.fill();
+    shadowTexture.dirty = true;
 
+    let mothX = moth.x - game.camera.x;
+    let mothY = moth.y - game.camera.y;
+    let gradientMoth = shadowTexture.context.createRadialGradient( mothX, mothY, 100 * 0.15, mothX, mothY, radius);
+    gradientMoth.addColorStop(0, 'rgba(255, 255, 255, .45)');
+    gradientMoth.addColorStop(1, 'rgba(255,255,255,0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradientMoth;
+    shadowTexture.context.arc(mothX, mothY, radius, 0, Math.PI * 2, false);
+    shadowTexture.context.fill();
+    shadowTexture.dirty = true;
+
+    let moth2X = moth2.x - game.camera.x;
+    let moth2Y = moth2.y - game.camera.y;
+    let gradientMoth2 = shadowTexture.context.createRadialGradient( moth2X, moth2Y, 100 * 0.15, moth2X, moth2Y, radius);
+    gradientMoth2.addColorStop(0, 'rgba(255, 255, 255, .45)');
+    gradientMoth2.addColorStop(1, 'rgba(255,255,255,0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradientMoth2;
+    shadowTexture.context.arc(moth2X, moth2Y, radius, 0, Math.PI * 2, false);
+    shadowTexture.context.fill();
+    shadowTexture.dirty = true;
+  }
   function handlePlayerCharacterMovement() {
     playerCharacter.body.setZeroVelocity();
 
@@ -268,12 +284,12 @@
 
   function removeBulletFromArray(){
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
-      background.mask.drawCircle(playerBullets.children[0].previousPosition.x, playerBullets.children[0].previousPosition.y, 150);
+/*      background.mask.drawCircle(playerBullets.children[0].previousPosition.x, playerBullets.children[0].previousPosition.y, 150);*/
       playerBullets.children.splice(0, 1);
     }
   }
 
-  function resetBackground(){
+ /* function resetBackground(){
     if(testCount === 0){
       //reset background
     }
@@ -281,7 +297,7 @@
       testCount--;
     }
   }
-
+*/
   function handlePlayerHit() {
     gameOver();
   }
