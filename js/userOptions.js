@@ -4,30 +4,27 @@ Handles the mic input used to control the echo-location of the bat
 
 */
 
+const gameOptions = document.getElementsByClassName("game-option");
 const analyser = Pizzicato.context.createAnalyser();
 analyser.fftSize = 2048;
-
-var bufferLength = analyser.frequencyBinCount;
-var dataArray = new Uint8Array(bufferLength);
-analyser.getByteTimeDomainData(dataArray);
-
+const bufferLength = analyser.frequencyBinCount;
 const micInput = new Pizzicato.Sound({
   source: 'input',
   options: { volume: 0.8, detached: true }
 }, err => {
   if (err) return;
-  
 }); 
 
+let micSwitch = false;
+let dataArray = new Uint8Array(bufferLength);
+analyser.getByteTimeDomainData(dataArray);
 micInput.connect(analyser);
 
-const userOptions = document.getElementById("mic-option");
+for (let i=0; i<gameOptions.length; i++) {
+  gameOptions[i].addEventListener("change", handleChecked);
+}
 
-let micSwitch = false;
-
-userOptions.addEventListener("click", handleAudioInputFlag);
-
-function handleAudioInputFlag() {
+function handleChecked() {
   micSwitch = !micSwitch;
 
   if (micSwitch) {  
