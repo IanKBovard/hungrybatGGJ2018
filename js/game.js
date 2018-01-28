@@ -9,8 +9,7 @@
   const SOUND_THRESHOLD = 200;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 100 + game.rnd.integerInRange(1, 10);
-  let radiusBat = 50 + game.rnd.integerInRange(1, 10);
+  let radius = 1000 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
@@ -34,6 +33,8 @@
   let mothAnimate2;
   let toothmathy;
   let toothmathyIdle;
+  let goldMoth;
+  let goldMothAnimation;
 
   let bitmap;
   let shadowTexture;
@@ -59,6 +60,7 @@
     game.load.physics('physicsData', '../assets/sprite_physics.json');
     game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
+    game.load.spritesheet('goldMoth', '../assets/goldmoth.png', 17, 18);
     game.load.spritesheet('gameOverMite', '../assets/gameOverMite.png', 640, 480);
   }
 
@@ -71,7 +73,8 @@
 
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
-    toothmathy = game.add.sprite(1100, 300, 'meatballmonster', 0);
+    goldMoth = game.add.sprite(1200, 100, 'goldMoth', 0);
+    toothmathy = game.add.sprite(1175, 350, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -106,7 +109,7 @@
     playerBulletsLight.lifespan = 400;
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
 
-    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
+    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, goldMoth,toothmathy ]);
 
     titeSmall.body.static = true;
     titeMedium.body.static = true;
@@ -126,6 +129,7 @@
     miteSmall2.body.static = true;
     miteMedium2.body.static = true;
     miteLarge2.body.static = true;
+
     playerCharacter.body.clearShapes();
     playerCharacter.body.loadPolygon('physicsData', 'hungry_bat');
     titeSmall.body.clearShapes();
@@ -166,6 +170,8 @@
 
     moth2.body.clearShapes();
     moth2.body.loadPolygon('physicsData', 'moth');
+    goldMoth.body.clearShapes();
+    goldMoth.body.loadPolygon('physicsData', 'moth');
 
     toothmathy.body.clearShapes();
     toothmathy.body.loadPolygon('physicsData', 'meatballmonster');
@@ -179,6 +185,8 @@
     mothAnimate2 = moth2.animations.add('mothIdle2');
     moth.animations.play('mothIdle', 15, true);
     moth2.animations.play('mothIdle2', 15, true);
+    goldMothAnimation = goldMoth.animations.add('goldMothIdle');
+    goldMoth.animations.play('goldMothIdle', 15, true);
     toothmathyIdle = toothmathy.animations.add('toothIdle');
     toothmathy.animations.play('toothIdle', 8, true);
 
@@ -308,6 +316,18 @@
     shadowTexture.context.arc(moth2X, moth2Y, radius, 0, Math.PI * 2, false);
     shadowTexture.context.fill();
     shadowTexture.dirty = true;
+
+    let goldMothX = goldMoth.x - game.camera.x;
+    let goldMothY = goldMoth.y - game.camera.y;
+    let gradientGoldMoth = shadowTexture.context.createRadialGradient( goldMothX, goldMothY, 100 * 0.55, goldMothX, goldMothY, radius);
+    gradientGoldMoth.addColorStop(0, 'rgba(255, 255, 255, .75)');
+    gradientGoldMoth.addColorStop(1, 'rgba(255,255,255,0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradientGoldMoth;
+    shadowTexture.context.arc(goldMothX, goldMothY, radius, 0, Math.PI * 2, false);
+    shadowTexture.context.fill();
+    shadowTexture.dirty = true;
+
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       let bulletX = playerBullets.children[0].x - game.camera.x;
       let bulletY = playerBullets.children[0].y - game.camera.y;
