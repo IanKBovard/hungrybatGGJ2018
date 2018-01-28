@@ -21,6 +21,10 @@
   let mothAnimate2;
   let toothmathy;
   let toothmathyIdle;
+
+  let shadowTexture;
+  let lightSprite;
+
   let updateCount = 20;
   let testCount = 120;
 
@@ -41,6 +45,7 @@
   }
 
   function create() {
+
     background = game.add.sprite(0, 0, 'background');
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -93,7 +98,10 @@
     miteLarge2.mask = playerCharacterMask;
 
     moth.mask = playerCharacterMask;
+    moth.mask.drawCircle(300, 350, 50);
     moth2.mask = playerCharacterMask;
+    moth.mask.drawCircle(600,250,50)
+    console.log('asdijoyhasdy',moth.mask)
 
     toothmathy.mask = playerCharacterMask;
 
@@ -106,7 +114,6 @@
     background.mask = playerCharacterMask;
 
     game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
-
 
     titeSmall.body.static = true;
     titeMedium.body.static = true;
