@@ -1,3 +1,50 @@
+/* Style Settings  */
+html, *, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
 body {
+  margin: 0;
   background-color: cornflowerblue;
+}
+
+#banner {
+  font-size: 50px;
+}
+
+.container {
+  width: 100%;
+}
+
+.content {
+  display: table;
+  margin: 50px auto;
+}
+
+#navbar {
+  width: 100%;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.nav-content {
+  border: 1px solid black;
+  
+  width: 50%;
+  text-align: center;
 }
