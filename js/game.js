@@ -21,6 +21,8 @@
   let gameOverTite;
   let gameOverTiteAnimation;
   let instructionsPage;
+  let gameOverTooth;
+  let gameOverToothAnimation;
 
   let playerBullets;
   let moth;
@@ -49,6 +51,7 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
+    game.load.spritesheet('gameOverTooth', '../assets/gameOverTooth.png', 640, 480)
     game.load.spritesheet('gameOverTite', '../assets/gameOverTite.png', 640, 480);
     game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
@@ -243,7 +246,12 @@
           console.log(`you hit ${body.sprite.key}`);
           break;
         case body.sprite.key === 'meatballmonster':
-          console.log(`you hit ${body.sprite.key}`);
+          gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
+          gameOverTooth.fixedToCamera = true;
+          gameOverToothAnimation = gameOverTooth.animations.add('gameOver3');
+          gameOverTooth.animations.play('gameOver3', 2.5, false);
+          gameOverTooth.inputEnabled = true;
+          gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
       }
     }else{
