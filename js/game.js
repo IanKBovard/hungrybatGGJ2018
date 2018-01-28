@@ -175,31 +175,35 @@
     title = game.add.text(265,200, 'hungry bat')*/;
   }
   function blockHit(body){
-    switch(true){
-      case body.sprite.key === 'titeSmall':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'titeMedium':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'titeLarge':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'miteSmall':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'miteMedium':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'miteLarge':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'moth':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
-      case body.sprite.key === 'meatballmonster':
-        console.log(`you hit ${body.sprite.key}`);
-        break;
+    if(body){
+      switch(true){
+        case body.sprite.key === 'titeSmall':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'titeMedium':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'titeLarge':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'miteSmall':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'miteMedium':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'miteLarge':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'moth':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+        case body.sprite.key === 'meatballmonster':
+          console.log(`you hit ${body.sprite.key}`);
+          break;
+      }
+    }else{
+      console.log('you hit the wall!');
     }
   }
   function update() {
