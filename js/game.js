@@ -1,5 +1,5 @@
 (Phaser => {
-  const GAME_WIDTH = 680;
+  const GAME_WIDTH = 640;
   const GAME_HEIGHT = 480;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
@@ -15,9 +15,10 @@
   let playerCharacter;
   let playerCharacterFloat;
   let background;
+/*  let titlePage;
+  let title*/;
 
   let playerBullets;
-  let playerBulletsLight;
   let moth;
   let mothShadow;
   let moth2;
@@ -169,13 +170,44 @@
     toothmathy.animations.play('toothIdle', 8, true);
 
     game.camera.follow(playerCharacter);
+    playerCharacter.body.onBeginContact.add(blockHit, this);
+/*    titlePage = game.add.sprite(0, 0, 'background');
+    title = game.add.text(265,200, 'hungry bat')*/;
   }
-
+  function blockHit(body){
+    switch(true){
+      case body.sprite.key === 'titeSmall':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'titeMedium':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'titeLarge':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'miteSmall':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'miteMedium':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'miteLarge':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'moth':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+      case body.sprite.key === 'meatballmonster':
+        console.log(`you hit ${body.sprite.key}`);
+        break;
+    }
+  }
   function update() {
     lightSprite.reset(game.camera.x, game.camera.y);
     updateShadowTexture();
 
     handlePlayerCharacterMovement();
+    //handleGameStart();
     handleBulletAnimations();
     //handleCollisions();
     removeBulletFromArray();
@@ -263,8 +295,12 @@
         break;
     }
   }
-
-  function handleCollisions() {
+/*  function handleGameStart(){
+    if(cursors.W.isDown){
+      console.log('w');
+    }
+  }
+*/  function handleCollisions() {
     playerCharacter.body.onEndContact.add(handlePlayerHit);
   }
 
