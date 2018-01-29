@@ -7,9 +7,10 @@
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
   const SOUND_THRESHOLD = 200;
+  const MOVE_COUNT = 90;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 100 + game.rnd.integerInRange(1, 10);
+  let radius = 1000 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
@@ -24,6 +25,9 @@
   let instructionsPage;
   let gameOverTooth;
   let gameOverToothAnimation;
+
+  let youWinScreen;
+  let youWinScreenAnimation;
 
   let themeSong;
   let menuClickSound;
@@ -47,6 +51,8 @@
   let shadowTexture;
   let lightSprite;
 
+  let meatballDirection = true;
+  let moveCount = MOVE_COUNT;
   let updateCount = 20;
   let bulletCountdown = 80;
 
@@ -57,6 +63,8 @@
     game.load.audio('sonar', '../assets/sounds/Sonar_Sound.wav');
     game.load.audio('crash', '../assets/sounds/Stalactite_Hurt_Sound.wav');
     game.load.audio('slide', '../assets/sounds/Bat_Falls.wav');
+
+    game.load.spritesheet('youWin', '../assets/images/HungryBat_GameWin_WhiteFade.png', 640, 480);
 
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
@@ -85,9 +93,8 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
-    console.log('aslkdjlasf',cursors.fire);
 
-    themeSong = game.add.audio('theme', .5);
+    themeSong = game.add.audio('theme', 0.5);
     menuClickSound = game.add.audio('menuClick', 3);
     toothCrunch = game.add.audio('toothCrunch', 6, 10);
     sonarSound = game.add.audio('sonar', 1.5);
@@ -97,7 +104,7 @@
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
     goldMoth = game.add.sprite(1200, 90, 'goldMoth', 0);
-    toothmathy = game.add.sprite(1175, 325, 'meatballmonster', 0);
+    toothmathy = game.add.sprite(1200, 325, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -196,9 +203,11 @@
     moth2.body.loadPolygon('physicsData', 'moth');
     goldMoth.body.clearShapes();
     goldMoth.body.loadPolygon('physicsData', 'moth');
+    goldMoth.body.fixedRotation = true;
 
     toothmathy.body.clearShapes();
     toothmathy.body.loadPolygon('physicsData', 'meatballmonster');
+    toothmathy.body.fixedRotation = true;
 
     playerCharacter.body.collideWorldBounds = true;
     playerCharacter.body.fixedRotation = true;
@@ -250,6 +259,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -261,6 +271,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -272,6 +283,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -283,6 +295,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -294,6 +307,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -305,6 +319,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -328,8 +343,16 @@
           gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'goldMoth':
-          console.log('YOU DID IT!');
+          menuClickSound.play();
+          disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
+          youWinScreen = game.add.sprite(0, 0, 'youWin', 0);
+          youWinScreen.fixedToCamera = true;
+          youWinScreenAnimation = youWinScreen.animations.add('victory');
+          youWinScreen.animations.play('victory', 2.5, false);
+          youWinScreen.inputEnabled = true;
+          youWinScreen.events.onInputUp.add(() => window.location.reload());
           break;
       }
     }else{
@@ -341,6 +364,7 @@
     updateShadowTexture();
 
     handlePlayerCharacterMovement();
+    handleToothmathyMovement();
     handleBulletAnimations();
     removeBulletFromArray();
     resetBulletTimer();
@@ -349,6 +373,26 @@
       handleMicInputData();
     }
   }
+
+  function handleToothmathyMovement() {
+    if (meatballDirection) {
+      toothmathy.body.moveDown(300);
+      moveCount--;
+
+      if (moveCount === 0) {
+        meatballDirection = false;
+      }
+
+    } else {
+      toothmathy.body.moveUp(300);
+      moveCount++;
+
+      if (moveCount === MOVE_COUNT) {
+        meatballDirection = true;
+      }
+    }
+  }
+
   function updateShadowTexture(){
     shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
     shadowTexture.context.fillRect(0, 0, 1360, 480);
