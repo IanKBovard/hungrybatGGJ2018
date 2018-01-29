@@ -260,6 +260,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -272,6 +273,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -284,6 +286,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -296,6 +299,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -308,6 +312,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -320,6 +325,7 @@
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -335,6 +341,7 @@
           toothCrunch.play();
           disableKeys();
           body.sprite.kill();
+          goldMoth.body.sprite.kill();
           gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
           gameOverTooth.fixedToCamera = true;
           gameOverToothAnimation = gameOverTooth.animations.add('gameOver3');
