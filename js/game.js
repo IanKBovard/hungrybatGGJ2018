@@ -85,7 +85,8 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
-    console.log('aslkdjlasf',cursors);
+    console.log('aslkdjlasf',cursors.fire);
+
     themeSong = game.add.audio('theme', .5);
     menuClickSound = game.add.audio('menuClick', 3);
     toothCrunch = game.add.audio('toothCrunch', 6, 10);
@@ -238,6 +239,9 @@
 
     cursors.right.isUp = true;
     cursors.right.enabled = false;
+
+    cursors.fire.isUp = true;
+    cursors.fire.enabled = false;
   }
   function blockHit(body){
     if(body){
