@@ -16,7 +16,7 @@ Hungry Bat is available to play at [https://iankbovard.github.io/](https://iankb
 ## Contribute
 
 
-Check out [The Hungry Bat](https://globalgamejam.org/2018/games/hungry-bat) at Global Game Jam to message any of the programmers and designers regarding comments and suggestions for the project.
+Check out [The Hungry Bat](https://globalgamejam.org/2018/games/hungry-bat) at Global Game Jam to message any of the programmers and artists regarding comments and suggestions for the project.
 
 ## License 
 
