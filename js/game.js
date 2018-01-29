@@ -10,7 +10,7 @@
   const MOVE_COUNT = 90;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 1000 + game.rnd.integerInRange(1, 10);
+  let radius = 100 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
