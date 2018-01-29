@@ -259,6 +259,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -270,6 +271,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -281,6 +283,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -292,6 +295,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -303,6 +307,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -314,6 +319,7 @@
           crashSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -340,6 +346,7 @@
           menuClickSound.play();
           disableKeys();
           body.sprite.kill();
+          toothmathy.body.sprite.kill();
           youWinScreen = game.add.sprite(0, 0, 'youWin', 0);
           youWinScreen.fixedToCamera = true;
           youWinScreenAnimation = youWinScreen.animations.add('victory');
@@ -375,7 +382,7 @@
       if (moveCount === 0) {
         meatballDirection = false;
       }
-      
+
     } else {
       toothmathy.body.moveUp(300);
       moveCount++;
