@@ -341,6 +341,7 @@
           body.sprite.kill();
           break;
         case body.sprite.key === 'meatballmonster':
+        themeSong.stop();
           toothCrunch.play();
           disableKeys();
           body.sprite.kill();
