@@ -35,6 +35,7 @@
   let sonarSound;
   let crashSound;
   let slideSound;
+  let victoryChime;
 
   let playerBullets;
   let moth;
@@ -57,6 +58,7 @@
   let bulletCountdown = 80;
 
   function preload() {
+    game.load.audio('victoryChime', '../assets/sounds/Hungry_Bat_Victory_Jingle.mp3');
     game.load.audio('theme', '../assets/music/HungryBatMainMP3.mp3');
     game.load.audio('menuClick', '../assets/sounds/Menu_Cursor_Sound.wav');
     game.load.audio('toothCrunch', '../assets/sounds/Monster_Crunch_Sound.wav');
@@ -100,6 +102,7 @@
     sonarSound = game.add.audio('sonar', 1.5);
     crashSound = game.add.audio('crash', 5);
     themeSong.play();
+    victoryChime = game.add.audio('victoryChime', 1.5)
 
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
@@ -338,6 +341,7 @@
           body.sprite.kill();
           break;
         case body.sprite.key === 'meatballmonster':
+        themeSong.stop();
           toothCrunch.play();
           disableKeys();
           body.sprite.kill();
@@ -350,7 +354,7 @@
           gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'goldMoth':
-          menuClickSound.play();
+          victoryChime.play();
           disableKeys();
           body.sprite.kill();
           toothmathy.body.sprite.kill();
