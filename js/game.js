@@ -7,6 +7,7 @@
   const PLAYER_BULLET_SPEED = 8;
   const SQRT_TWO = Math.sqrt(2);
   const SOUND_THRESHOLD = 200;
+  const MOVE_COUNT = 90;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
   let radius = 1000 + game.rnd.integerInRange(1, 10);
@@ -50,6 +51,8 @@
   let shadowTexture;
   let lightSprite;
 
+  let meatballDirection = true;
+  let moveCount = MOVE_COUNT;
   let updateCount = 20;
   let bulletCountdown = 80;
 
@@ -101,7 +104,7 @@
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
     goldMoth = game.add.sprite(1200, 90, 'goldMoth', 0);
-    toothmathy = game.add.sprite(1175, 325, 'meatballmonster', 0);
+    toothmathy = game.add.sprite(1200, 325, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -200,9 +203,11 @@
     moth2.body.loadPolygon('physicsData', 'moth');
     goldMoth.body.clearShapes();
     goldMoth.body.loadPolygon('physicsData', 'moth');
+    goldMoth.body.fixedRotation = true;
 
     toothmathy.body.clearShapes();
     toothmathy.body.loadPolygon('physicsData', 'meatballmonster');
+    toothmathy.body.fixedRotation = true;
 
     playerCharacter.body.collideWorldBounds = true;
     playerCharacter.body.fixedRotation = true;
@@ -352,6 +357,7 @@
     updateShadowTexture();
 
     handlePlayerCharacterMovement();
+    handleToothmathyMovement();
     handleBulletAnimations();
     removeBulletFromArray();
     resetBulletTimer();
@@ -360,6 +366,26 @@
       handleMicInputData();
     }
   }
+
+  function handleToothmathyMovement() {
+    if (meatballDirection) {
+      toothmathy.body.moveDown(300);
+      moveCount--;
+
+      if (moveCount === 0) {
+        meatballDirection = false;
+      }
+      
+    } else {
+      toothmathy.body.moveUp(300);
+      moveCount++;
+
+      if (moveCount === MOVE_COUNT) {
+        meatballDirection = true;
+      }
+    }
+  }
+
   function updateShadowTexture(){
     shadowTexture.context.fillStyle = 'rgb(0, 0, 0)';
     shadowTexture.context.fillRect(0, 0, 1360, 480);
