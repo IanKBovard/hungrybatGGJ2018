@@ -9,7 +9,7 @@
   const SOUND_THRESHOLD = 200;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 100 + game.rnd.integerInRange(1, 10);
+  let radius = 1000 + game.rnd.integerInRange(1, 10);
 
   let end;
   let cursors;
@@ -24,6 +24,9 @@
   let instructionsPage;
   let gameOverTooth;
   let gameOverToothAnimation;
+
+  let youWinScreen;
+  let youWinScreenAnimation;
 
   let themeSong;
   let menuClickSound;
@@ -57,6 +60,7 @@
     game.load.audio('sonar', '../assets/sounds/Sonar_Sound.wav');
     game.load.audio('crash', '../assets/sounds/Stalactite_Hurt_Sound.wav');
     game.load.audio('slide', '../assets/sounds/Bat_Falls.wav');
+    game.load.image('youWin', '../assets/images/HungryBat_GameWin.png');
 
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
@@ -85,7 +89,6 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
-    console.log('aslkdjlasf',cursors.fire);
 
     themeSong = game.add.audio('theme', .5);
     menuClickSound = game.add.audio('menuClick', 3);
@@ -328,8 +331,15 @@
           gameOverTooth.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'goldMoth':
-          console.log('YOU DID IT!');
+          menuClickSound.play();
+          disableKeys();
           body.sprite.kill();
+          youWinScreen = game.add.sprite(0, 0, 'youWin', 0);
+          youWinScreen.fixedToCamera = true;
+          youWinScreenAnimation = youWinScreen.animations.add('victory');
+          youWinScreen.animations.play('victory', 2.5, false);
+          youWinScreen.inputEnabled = true;
+          youWinScreen.events.onInputUp.add(() => window.location.reload());
           break;
       }
     }else{
