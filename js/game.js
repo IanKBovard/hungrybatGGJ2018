@@ -60,7 +60,8 @@
     game.load.audio('sonar', '../assets/sounds/Sonar_Sound.wav');
     game.load.audio('crash', '../assets/sounds/Stalactite_Hurt_Sound.wav');
     game.load.audio('slide', '../assets/sounds/Bat_Falls.wav');
-    game.load.image('youWin', '../assets/images/HungryBat_GameWin.png');
+
+    game.load.spritesheet('youWin', '../assets/images/HungryBat_GameWin_WhiteFade.png', 640, 480);
 
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
@@ -90,7 +91,7 @@
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
 
-    themeSong = game.add.audio('theme', .5);
+    themeSong = game.add.audio('theme', 0.5);
     menuClickSound = game.add.audio('menuClick', 3);
     toothCrunch = game.add.audio('toothCrunch', 6, 10);
     sonarSound = game.add.audio('sonar', 1.5);
