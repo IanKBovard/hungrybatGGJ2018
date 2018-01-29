@@ -1,4 +1,4 @@
-# Hungry Bat
+![alt text](https://github.com/IanKBovard/hungrybat/blob/master/assets/images/featuredstilloriginal.png?raw=true)
 
 ## Description
 

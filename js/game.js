@@ -9,7 +9,8 @@
   const SOUND_THRESHOLD = 200;
   const game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, GAME_CONTAINER_ID, { preload, create, update });
 
-  let radius = 100 + game.rnd.integerInRange(1, 10);
+  let radius = 1000 + game.rnd.integerInRange(1, 10);
+
   let end;
   let cursors;
   let playerCharacter;
@@ -21,6 +22,15 @@
   let gameOverTite;
   let gameOverTiteAnimation;
   let instructionsPage;
+  let gameOverTooth;
+  let gameOverToothAnimation;
+
+  let themeSong;
+  let menuClickSound;
+  let toothCrunch;
+  let sonarSound;
+  let crashSound;
+  let slideSound;
 
   let playerBullets;
   let moth;
@@ -30,6 +40,8 @@
   let mothAnimate2;
   let toothmathy;
   let toothmathyIdle;
+  let goldMoth;
+  let goldMothAnimation;
 
   let bitmap;
   let shadowTexture;
@@ -37,7 +49,15 @@
 
   let updateCount = 20;
   let bulletCountdown = 80;
+
   function preload() {
+    game.load.audio('theme', '../assets/music/HungryBatMainMP3.mp3');
+    game.load.audio('menuClick', '../assets/sounds/Menu_Cursor_Sound.wav');
+    game.load.audio('toothCrunch', '../assets/sounds/Monster_Crunch_Sound.wav');
+    game.load.audio('sonar', '../assets/sounds/Sonar_Sound.wav');
+    game.load.audio('crash', '../assets/sounds/Stalactite_Hurt_Sound.wav');
+    game.load.audio('slide', '../assets/sounds/Bat_Falls.wav');
+
     game.load.spritesheet(GFX, '../assets/hungry_bat.png', 100, 100);
     game.load.image('background', '../assets/background.jpg');
     game.load.image('miteSmall', '../assets/miteSmall.png');
@@ -49,11 +69,13 @@
     game.load.spritesheet('bullets', '../assets/sonar.png');
     game.load.spritesheet('moth', '../assets/moth.png', 17, 18);
     game.load.spritesheet('meatballmonster', '../assets/meatballmonster.png', 100, 100);
+    game.load.spritesheet('gameOverTooth', '../assets/gameOverTooth.png', 640, 480);
     game.load.spritesheet('gameOverTite', '../assets/gameOverTite.png', 640, 480);
     game.load.image('tutorial', '../assets/tutorial.png');
     game.load.physics('physicsData', '../assets/sprite_physics.json');
     game.load.image('title', '../assets/startscreen.jpg');
     game.load.image('gameOver', '../assets/game_over.png');
+    game.load.spritesheet('goldMoth', '../assets/goldmoth.png', 17, 18);
     game.load.spritesheet('gameOverMite', '../assets/gameOverMite.png', 640, 480);
   }
 
@@ -63,10 +85,18 @@
     cursors = game.input.keyboard.createCursorKeys();
     cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     cursors.fire.onUp.add(handlePlayerFire);
+    console.log('aslkdjlasf',cursors);
+    themeSong = game.add.audio('theme', .5);
+    menuClickSound = game.add.audio('menuClick', 3);
+    toothCrunch = game.add.audio('toothCrunch', 6, 10);
+    sonarSound = game.add.audio('sonar', 1.5);
+    crashSound = game.add.audio('crash', 5);
+    themeSong.play();
 
     moth = game.add.sprite(300, 350, 'moth', 0);
     moth2 = game.add.sprite(600, 250, 'moth', 0);
-    toothmathy = game.add.sprite(1100, 300, 'meatballmonster', 0);
+    goldMoth = game.add.sprite(1200, 90, 'goldMoth', 0);
+    toothmathy = game.add.sprite(1175, 325, 'meatballmonster', 0);
 
     titeSmall = game.add.sprite(150, 50, 'titeSmall');
     titeMedium = game.add.sprite(275, 100, 'titeMedium');
@@ -101,7 +131,7 @@
     playerBulletsLight.lifespan = 400;
     playerCharacter = game.add.sprite(60, 200, GFX, 0);
 
-    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, toothmathy ]);
+    game.physics.p2.enable([ titeSmall, titeMedium, titeLarge, titeSmall2, titeMedium2, titeLarge2, titeSmall3, titeMedium3, miteSmall, miteMedium, miteLarge, miteSmall2, miteMedium2, miteLarge2, playerCharacter, playerBullets, moth, moth2, goldMoth,toothmathy ]);
 
     titeSmall.body.static = true;
     titeMedium.body.static = true;
@@ -121,8 +151,10 @@
     miteSmall2.body.static = true;
     miteMedium2.body.static = true;
     miteLarge2.body.static = true;
+
     playerCharacter.body.clearShapes();
     playerCharacter.body.loadPolygon('physicsData', 'hungry_bat');
+
     titeSmall.body.clearShapes();
     titeSmall.body.loadPolygon('physicsData', 'titeSmall');
     titeMedium.body.clearShapes();
@@ -161,6 +193,8 @@
 
     moth2.body.clearShapes();
     moth2.body.loadPolygon('physicsData', 'moth');
+    goldMoth.body.clearShapes();
+    goldMoth.body.loadPolygon('physicsData', 'moth');
 
     toothmathy.body.clearShapes();
     toothmathy.body.loadPolygon('physicsData', 'meatballmonster');
@@ -174,6 +208,8 @@
     mothAnimate2 = moth2.animations.add('mothIdle2');
     moth.animations.play('mothIdle', 15, true);
     moth2.animations.play('mothIdle2', 15, true);
+    goldMothAnimation = goldMoth.animations.add('goldMothIdle');
+    goldMoth.animations.play('goldMothIdle', 15, true);
     toothmathyIdle = toothmathy.animations.add('toothIdle');
     toothmathy.animations.play('toothIdle', 8, true);
 
@@ -182,16 +218,34 @@
     titlePage = game.add.button(0, 0, 'title', actionOnClick);
   }
   function actionOnClick(){
+    menuClickSound.play();
     titlePage.kill();
     instructionsPage = game.add.button(0, 0, 'tutorial', onClick);
   }
  function onClick(){
+  menuClickSound.play();
   instructionsPage.kill();
  }
+  function disableKeys(){
+    cursors.down.isUp = true;
+    cursors.down.enabled = false;
+
+    cursors.up.isUp = true;
+    cursors.up.enabled = false;
+
+    cursors.left.isUp = true;
+    cursors.left.enabled = false;
+
+    cursors.right.isUp = true;
+    cursors.right.enabled = false;
+  }
   function blockHit(body){
     if(body){
       switch(true){
         case body.sprite.key === 'titeSmall':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -200,6 +254,9 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'titeMedium':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -208,6 +265,9 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'titeLarge':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverTite = game.add.sprite(0, 0, 'gameOverTite', 0);
           gameOverTite.fixedToCamera = true;
           gameOverTiteAnimation = gameOverTite.animations.add('gameOver2');
@@ -216,6 +276,9 @@
           gameOverTite.events.onInputUp.add(() => window.location.reload())
           break;
         case body.sprite.key === 'miteSmall':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -224,6 +287,9 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteMedium':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -232,6 +298,9 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'miteLarge':
+          crashSound.play();
+          disableKeys();
+          body.sprite.kill();
           gameOverMite = game.add.sprite(0, 0, 'gameOverMite', 0);
           gameOverMite.fixedToCamera = true;
           gameOverMiteAnimation = gameOverMite.animations.add('gameOver1');
@@ -240,10 +309,23 @@
           gameOverMite.events.onInputUp.add(() => window.location.reload());
           break;
         case body.sprite.key === 'moth':
-          console.log(`you hit ${body.sprite.key}`);
+        menuClickSound.play();
+          body.sprite.kill();
           break;
         case body.sprite.key === 'meatballmonster':
-          console.log(`you hit ${body.sprite.key}`);
+          toothCrunch.play();
+          disableKeys();
+          body.sprite.kill();
+          gameOverTooth = game.add.sprite(0, 0, 'gameOverTooth', 0);
+          gameOverTooth.fixedToCamera = true;
+          gameOverToothAnimation = gameOverTooth.animations.add('gameOver3');
+          gameOverTooth.animations.play('gameOver3', 2.5, false);
+          gameOverTooth.inputEnabled = true;
+          gameOverTooth.events.onInputUp.add(() => window.location.reload());
+          break;
+        case body.sprite.key === 'goldMoth':
+          console.log('YOU DID IT!');
+          body.sprite.kill();
           break;
       }
     }else{
@@ -298,6 +380,18 @@
     shadowTexture.context.arc(moth2X, moth2Y, radius, 0, Math.PI * 2, false);
     shadowTexture.context.fill();
     shadowTexture.dirty = true;
+
+    let goldMothX = goldMoth.x - game.camera.x;
+    let goldMothY = goldMoth.y - game.camera.y;
+    let gradientGoldMoth = shadowTexture.context.createRadialGradient( goldMothX, goldMothY, 100 * 0.55, goldMothX, goldMothY, radius);
+    gradientGoldMoth.addColorStop(0, 'rgba(255, 255, 255, .75)');
+    gradientGoldMoth.addColorStop(1, 'rgba(255,255,255,0.0)');
+    shadowTexture.context.beginPath();
+    shadowTexture.context.fillStyle = gradientGoldMoth;
+    shadowTexture.context.arc(goldMothX, goldMothY, radius, 0, Math.PI * 2, false);
+    shadowTexture.context.fill();
+    shadowTexture.dirty = true;
+
     if(playerBullets.children.length > 0 && playerBullets.children[0].lifespan < 0){
       let bulletX = playerBullets.children[0].x - game.camera.x;
       let bulletY = playerBullets.children[0].y - game.camera.y;
@@ -352,6 +446,7 @@
 
   function handlePlayerFire() {
     if(playerBullets.children.length === 0){
+      sonarSound.play();
       playerBullets.add(game.add.sprite(playerCharacter.x + 10, playerCharacter.y - 25, 'bullets', 0));
       playerBullets.children.forEach(bullet => {
         bullet.lifespan = 250;
